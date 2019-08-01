@@ -5,8 +5,9 @@ var mysqlDB = mysql.createConnection({
     user: 'root',
     password: '',
     database: 'project_db',
-    queueLimit: 0, // unlimited queueing
-    connectionLimit: 0 // unlimited connections 
+    queueLimit: 0,       // unlimited queueing
+    connectionLimit: 0   // unlimited connections 
 });
 
 module.exports = mysqlDB;
+

@@ -1,0 +1,11 @@
+.card {
+    width : 40vw;
+    margin-left: 30vw;
+    margin-right: 30vw;
+    margin-top: 5vh;
+}
+
+.error {
+    margin-top: 2px;
+    color : red;
+}

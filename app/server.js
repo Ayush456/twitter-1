@@ -2,12 +2,13 @@
 const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
-var app = express();
+const app = express();
 
 //default paths
 const publicDirectoryPath = path.join(__dirname, 'public');
 const viewsPath = path.join(__dirname, 'views');
-const layoutsPath = path.join(__dirname, '/views/layouts');
+const layoutsPath = path.join(__dirname, 'views/layouts');
+const authPath = path.join(__dirname,'views/auth');
 
 //set-up for hbs --> views and view engine
 app.set('views', viewsPath);
@@ -25,9 +26,10 @@ const twitterRoute = require('./routers/twitterRouter');
 //required by express
 app.use(express.static(publicDirectoryPath));
 app.use(express.static(viewsPath));
+app.use(express.static(authPath));
 
 //base routes
-app.use(['/','/twitter'],indexRoute); //for login-signin-auth  
+app.use('/twitter',indexRoute);       //for login-signin-auth  
 app.use('/user',twitterRoute);        //for home-profile-logout-tweet
 
 
