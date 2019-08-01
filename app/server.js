@@ -6,7 +6,7 @@ var app = express();
 
 //default paths
 const publicDirectoryPath = path.join(__dirname, 'public');
-const viewsPath = path.join(__dirname, 'views');
+const viewsPath = path.join(__dirname, '/views');
 const layoutsPath = path.join(__dirname, '/views/layouts');
 
 //set-up for hbs --> views and view engine
@@ -27,9 +27,8 @@ app.use(express.static(publicDirectoryPath));
 app.use(express.static(viewsPath));
 
 //base routes
-app.use(['/','/twitter'],indexRoute); //for login-signin-auth  
-app.use('/user',twitterRoute);        //for home-profile-logout-tweet
-
+app.use(['/twitter','/'],indexRoute); //for login-signin-auth  
+app.use('/user',twitterRoute);  //for home-profile-logout-tweet
 
 //port created
 const PORT = process.env.PORT || 5000;
