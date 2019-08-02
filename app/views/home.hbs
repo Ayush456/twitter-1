@@ -1,6 +1,7 @@
 <html lang="en">
 <head>
     <title>Homepage</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 </head>
 <body>
@@ -8,11 +9,28 @@
         <div class="col-md-3">
             {{>baseLeft}}
         </div>
-        <div class="col-md-6"></div>
+        <div class="col-md-6">
+
+        </div>
         <div class="col-md-3">
             {{>baseRight}}
         </div>
     </div>
    
 </body>
+<script>
+    let elements = document.getElementsByClassName('vertical-nav-left');
+
+    $('.vertical-nav-left li').bind('click',function(e){
+        e = e || window.event;
+        var ul = $(this).parent();
+        var index = ul.children().index(this);
+        
+        $('button').removeClass('active');
+
+        $(".vertical-nav-left li button").eq(index).addClass('active');
+       
+
+    });
+</script>
 </html>
