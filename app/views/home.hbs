@@ -1,36 +1,75 @@
 <html lang="en">
+
 <head>
     <title>Homepage</title>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 </head>
+
+<style>
+    #home {
+        border-right: 1px solid #BFC9CA ;
+        border-left: 1px solid #BFC9CA ;
+    }
+    .hometext{
+        font-weight: 800;
+        font-size:20px;
+        border-bottom: 1px solid #BFC9CA;
+        padding-bottom : 10px; 
+    }
+.user-tweet{
+
+}
+.user-tweet h4{
+    margin-left: 15px;
+  
+}
+#text_tweets::placeholder {
+  color: BFC9CA;
+  font-size: 20px;
+}
+</style>
+
+
 <body>
     <div class="row">
         <div class="col-md-3">
             {{>baseLeft}}
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5" id="home">
+            
+            <h4 class="hometext">Home</h4>
+           
+            <div class="user-tweet">
+                <h5 style="  opacity: 0.7;">Enter your tweet message here</h5>
+                <div>
+                    <i style="float: left;width:10%;font-size:30px;" class="glyphicon glyphicon-envelope"></i>
+                    <input id="text_tweets" type="text" style="float: right;width:90%;height:70px;border:none" placeholder="Whats Happening?">
+                </div>
+            </div>    
 
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             {{>baseRight}}
         </div>
     </div>
-   
+
 </body>
 <script>
     let elements = document.getElementsByClassName('vertical-nav-left');
 
-    $('.vertical-nav-left li').bind('click',function(e){
+    $('.vertical-nav-left li').bind('click', function (e) {
         e = e || window.event;
         var ul = $(this).parent();
         var index = ul.children().index(this);
-        
+
         $('button').removeClass('active');
 
         $(".vertical-nav-left li button").eq(index).addClass('active');
-       
+
 
     });
 </script>
+
 </html>
