@@ -16,16 +16,10 @@ class AuthController {
     //   pass = pass.trim(); 
     //   console.log(email+" "+pass); 
       
-        mysqlDB.query('select count(*) as num_count from employer where name=? and age=?',[email,pass],function(err,result){
-          
+        mysqlDB.query('select count(*) as num_count from user where user_name=? and user_password=?',[email,pass],function(err,result){
             console.log(result[0].num_count);
-           
             res.status(200).send((result[0].num_count).toString());
-           
         });
-       
-      
-      
     //   return res.status(302).redirect('/login');         
     };
 
