@@ -27,7 +27,7 @@ app.use(express.static(publicDirectoryPath));
 app.use(express.static(viewsPath));
 
 //base routes
-app.use(['/twitter','/'],indexRoute); //for login-signin-auth  
+app.use(['/'],indexRoute); //for login-signin-auth  
 app.use('/user',twitterRoute);  //for home-profile-logout-tweet
 
 //port created
