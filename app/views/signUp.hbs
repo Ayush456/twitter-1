@@ -1,0 +1,53 @@
+<html lang="en">
+<head>
+    <title>Sign-Up</title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link  type="text/css" rel="stylesheet" href="/css/signup.css">
+</head>
+<body>
+    <div class="card">
+        <article class="card-body">
+            <a href="" class="float-right btn btn-outline-primary">Log In</a>
+            <h4 class="card-title mb-4 mt-1">Sign Up</h4>
+            <form>
+                <div class="form-group">
+                    <label>Your name</label>
+                    <input name="" class="form-control" placeholder="Name" type="text" id="user-name">
+                    <div class="error" id="name-error"></div>
+                </div> 
+
+                <div class="form-group">
+                    <label>Birth Date</label>
+                    <input name="" class="form-control" type="date" id="user-dob">
+                    <div class="error" id="dob-error"></div>
+                </div> 
+
+                <div class="form-group">
+                    <label>Your email</label>
+                    <input name="" class="form-control" placeholder="Email" id="user-email" type="email">
+                    <div class="error" id="email-error"></div>
+                </div> 
+
+                <div class="form-group">
+                    <label>Your password</label>
+                    <input class="form-control" placeholder="Password" type="password" id="user-password">
+                    <div class="error" id="password-error"></div>
+                </div> 
+
+                <div class="form-group">
+                    <label>Confrim password</label>
+                    <input class="form-control" placeholder="Confirm Password" type="password" id="cnf-password">
+                    <div class="error" id="cnf-password-error"></div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-block" id="sign-up"> Sign Up </button>
+                </div>
+            </form>
+        </article>
+    </div> 
+
+    <script src="/js/signup.js"></script>
+</body>
+</html>
