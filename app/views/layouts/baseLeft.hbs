@@ -1,19 +1,93 @@
-<div class="navigation common">
-    <div class="nav" id="nav_home_cnt">
-        <img id="logo" src="../../public/assets/logo.jpg" alt="Hi">
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+ <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=DM+Serif+Display|Kaushan+Script|Libre+Caslon+Display|Ma+Shan+Zheng|Pacifico&display=swap" rel="stylesheet">
+<style>
+.vertical-nav-left{
+      width: 30%;
+      height: 90vh;
+      position: fixed;
+      top: 100px;
+      margin-left: 50px;
+ }
+
+#logo{
+    margin-left: 20px;
+    margin-top: 20px;
+    transition: transform 3s;
+}
+
+#logo:hover{
+    transform: scale(1.5);
+}
+
+.logo-pack p{
+    margin-left: 10px;
+    font-weight: 400;
+    position:absolute;
+    top: 32px;
+    left: 60px;
+    font-size: 20px;
+    font-family: 'Pacifico', cursive;
+}
+.vertical-nav-left ul{
+ list-style-type:none; 
+}
+
+.vertical-nav-left ul li button{
+    background-color:transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none; 
+    font-size: 21px;
+    font-weight: bold;
+    
+}
+
+.vertical-nav-left ul li button i{
+    margin-right: 10px;
+}
+
+.vertical-nav-left ul li{
+    margin-bottom: 22px;
+}
+
+.active{
+    color: #5DADE2 ;
+    font-weight: bold;
+}
+
+.btn-tweet{
+    border-radius: 25px;
+    height: 50px;
+    width: 150px;
+    background: #3498DB;
+    font-weight: bold;
+    font-size: 15px;
+    color: white;
+}
+
+</style>
+
+   <div class="logo-pack">
+        <img id="logo" src="https://img.icons8.com/color/48/000000/twitter.png"> 
+        <p>Twitter</p>
     </div>
-    <div class="nav" id="nav_home_cnt">
-        <button class="nav_btn" id="nav_home_btn">Home</button>
-    </div>
-    <div class="nav" id="nav_profile_cnt">
-        <button class="nav_btn" id="nav_profile_btn">Profile</button>
-    </div>
-    <div class="nav" id="nav_tweet_cnt">
-        <button class="nav_btn" id="nav_tweet_btn">Tweet</button>
-    </div>
-    <div class="nav" id="nav_logout_cnt">
-        <button class="nav_btn" id="nav_logout_btn">Logout</button>
-    </div>
+
+<div class="vertical-nav-left">
+    
+   <ul>
+       <li><button class="active"> <i class="glyphicon glyphicon-home"></i> Home</button> </li>
+       <li><button> <i class="glyphicon glyphicon-road"></i> Explore</button></li>
+       <li><button><i class="glyphicon glyphicon-bell"></i>Notification</button></li>
+       <li><button> <i class="glyphicon glyphicon-envelope"></i> Message</button></li>
+       <li><button> <i class="glyphicon glyphicon-bookmark"></i> Bookmark</button></li>
+       <li><button> <i class="glyphicon glyphicon-list-alt"></i> Lists</button></li>
+       <li><button> <i class="glyphicon glyphicon-user"></i> Profile</button></li>
+       <li><button> <i class="glyphicon glyphicon-th-large"></i>More</button></li>
+       <button class="btn-tweet">Tweet</button>
+   </ul> 
+
 </div>
-
-
