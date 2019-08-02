@@ -29,7 +29,7 @@ app.use(express.static(viewsPath));
 app.use(express.static(authPath));
 
 //base routes
-app.use('/twitter',indexRoute);       //for login-signin-auth  
+app.use('/',indexRoute);       //for login-signin-auth  
 app.use('/user',twitterRoute);        //for home-profile-logout-tweet
 
 
