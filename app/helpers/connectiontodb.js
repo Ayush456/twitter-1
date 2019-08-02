@@ -1,10 +1,11 @@
 const mysql = require('mysql');
 
-var mysqlDB = mysql.createConnection({
-    host: 'localhost',
+var mysqlDB = mysql.createPool({
     user: 'root',
-    password: '',
-    database: 'project_db',
+    host: '127.0.0.1',
+    port: '3306',
+    password: '1234',
+    database: 'twitter',
     queueLimit: 0,       // unlimited queueing
     connectionLimit: 0   // unlimited connections 
 });

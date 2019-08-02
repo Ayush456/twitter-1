@@ -21,7 +21,9 @@ const makeNewUserObject = (name,emailId,dob,password) => {
 
 const sendNewUserObject = (user) => {
     $.post("http://localhost:5000/twitter/object",user,(data,status,xhr) => {
+        console.log(data);
         console.log(status);
+        console.log(xhr);
     },"json");
 }
 
