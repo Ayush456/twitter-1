@@ -20,7 +20,7 @@ const makeNewUserObject = (name,emailId,dob,password) => {
 }
 
 const sendNewUserObject = (user) => {
-    $.post("http://localhost:5000/twitter/object",user,(data,status,xhr) => {
+    $.post("http://localhost:5000/twitter/signup",user,(data,status,xhr) => {
         console.log(data);
         console.log(status);
         console.log(xhr);
@@ -115,7 +115,6 @@ const validateNewUser = async (event,callback) => {
     try{
         await Promise.all([validateName(name),validateDob(dob),validateEmailId(emailid),validatePassword(password),validateCnfPassword(confrimPassword)]);
         const userObject = await makeNewUserObject(name,emailid,dob,password);
-        console.log(userObject);
         callback(userObject);
     }
     catch(error) {

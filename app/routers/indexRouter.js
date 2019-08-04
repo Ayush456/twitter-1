@@ -8,13 +8,14 @@ let authController = new AuthContoller();
 router.get('/',authController.login);
 
 router.get('/login',authController.login);
+
 router.post('/login',authController.checkLoginReg);
 
 router.get('/signup',(req,res)=>{
     res.render('signUp');
 });
-
-router.post('/object', async (request,response) => {
+// /user
+router.post('/signup', async (request,response) => {
     const user = request.body;
     try {
         console.log(user);

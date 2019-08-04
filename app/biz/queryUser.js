@@ -16,14 +16,14 @@ const createUser = ({userId,userName,userPassword,userPasswordHash,userDob,userE
     });
 }
 
-const getUserById = (userId) => {
+const getUserById = ({userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
                 connection.query(`select * from user where user_id = '${userId}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
-                    else if(row[0]==null) resolve(null);
+                    else if(row[0]==null) return resolve(null);
                     resolve(row[0]);
                 });
             }
@@ -31,14 +31,14 @@ const getUserById = (userId) => {
     });
 }
 
-const getUserByEmail = (userEmail) => {
+const getUserByEmail = ({userEmail}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
                 connection.query(`select * from user where user_email = '${userEmail}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
-                    else if(row[0]==null) resolve(null);
+                    else if(row[0]==null) return resolve(null);
                     resolve(row[0]);
                 });
             }
@@ -46,7 +46,7 @@ const getUserByEmail = (userEmail) => {
     });
 }
 
-const updateUserProfile = (userId,picturePath) => {
+const updateUserProfile = ({userId,picturePath}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
@@ -61,7 +61,7 @@ const updateUserProfile = (userId,picturePath) => {
     });
 }
 
-const updateUserCover = (userId,picturePath) => {
+const updateUserCover = ({userId,picturePath}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
@@ -75,7 +75,7 @@ const updateUserCover = (userId,picturePath) => {
     });
 }
 
-const updateUserStatus = (userId,newStatus) => {
+const updateUserStatus = ({userId,newStatus}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
@@ -89,12 +89,12 @@ const updateUserStatus = (userId,newStatus) => {
     });
 }
 
-const increaseFollowCount = (userId) => {
+const increaseCount = (column,{userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`update user set user_follow_count = user_follow_count+1 where user_id = '${userId}'`,(error) => {
+                connection.query(`update user set ${column} = ${column}+1 where user_id = '${userId}'`,(error) => {
                     if(error) reject('error while executing query\n'+error);
                     resolve();
                 });
@@ -103,12 +103,12 @@ const increaseFollowCount = (userId) => {
     });
 }
 
-const decreaseFollowCount = (userId) => {
+const decreaseCount = (column,{userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`update user set user_follow_count = user_follow_count-1 where user_id = '${userId}'`,(error) => {
+                connection.query(`update user set ${column} = ${column}-1 where user_id = '${userId}'`,(error) => {
                     if(error) reject('error while executing query\n'+error);
                     resolve();
                 });
@@ -117,64 +117,7 @@ const decreaseFollowCount = (userId) => {
     });
 }
 
-const increaseFollowerCount = (userId) => {
-    return new Promise((resolve,reject) => {
-        mysqldb.getConnection((error,connection) => {
-            if(error) reject('error while conecting db\n'+error);
-            else {
-                connection.query(`update user set user_follower_count = user_follower_count+1 where user_id = '${userId}'`,(error) => {
-                    if(error) reject('error while executing query\n'+error);
-                    resolve();
-                });
-            }
-        })
-    });
-
-}
-
-const decreaseFollowerCount = (userId) => {
-    return new Promise((resolve,reject) => {
-        mysqldb.getConnection((error,connection) => {
-            if(error) reject('error while conecting db\n'+error);
-            else {
-                connection.query(`update user set user_follower_count = user_follower_count-1 where user_id = '${userId}'`,(error) => {
-                    if(error) reject('error while executing query\n'+error);
-                    resolve();
-                });
-            }
-        })
-    });
-}
-
-const increaseTweetCount = (userId) => {
-    return new Promise((resolve,reject) => {
-        mysqldb.getConnection((error,connection) => {
-            if(error) reject('error while conecting db\n'+error);
-            else {
-                connection.query(`update user set user_tweet_count = user_tweet_count+1 where user_id = '${userId}'`,(error) => {
-                    if(error) reject('error while executing query\n'+error);
-                    resolve();
-                });
-            }
-        })
-    });
-}
-
-const decreaseTweetCount = (userId) => {
-    return new Promise((resolve,reject) => {
-        mysqldb.getConnection((error,connection) => {
-            if(error) reject('error while conecting db\n'+error);
-            else {
-                connection.query(`update user set user_tweet_count = user_tweet_count-1 where user_id = '${userId}'`,(error) => {
-                    if(error) reject('error while executing query\n'+error);
-                    resolve();
-                });
-            }
-        })
-    });
-}
-
-const deleteUser = (userId) => {
+const deleteUser = ({userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
@@ -195,12 +138,8 @@ module.exports = {
     UpdateUserProfile : updateUserProfile,
     updateUserCover : updateUserCover,
     updateUserStatus : updateUserStatus,
-    increaseFollowCount : increaseFollowCount,
-    decreaseFollowCount : decreaseFollowCount,
-    increaseFollowerCount : increaseFollowerCount,
-    decreaseFollowerCount : decreaseFollowerCount,
-    increaseTweetCount : increaseTweetCount,
-    decreaseTweetCount : decreaseTweetCount,
+    increaseCount : increaseCount,
+    decreaseCount : decreaseCount,
     deleteUser : deleteUser
 }
 

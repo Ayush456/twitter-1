@@ -22,6 +22,8 @@ app.use(express.urlencoded({ extended: false }));
 //routes included
 const indexRoute = require('./routers/indexRouter');
 const twitterRoute = require('./routers/twitterRouter');
+const commentRoute = require('./routers/commentRouter');
+const tweetRoute = require('./routers/tweetRouter');
 
 //required by express
 app.use(express.static(publicDirectoryPath));
@@ -31,10 +33,11 @@ app.use(express.static(authPath));
 //base routes
 app.use('/twitter',indexRoute);       //for login-signin-auth  
 app.use('/user',twitterRoute);        //for home-profile-logout-tweet
-
+app.use('/comment',commentRoute);     //like search edit feed trend who_to_follow activity
+app.use('/tweet',tweetRoute);
 
 //port created
 const PORT = process.env.PORT || 5000;
-app.listen(PORT,()=>{
+app.listen(PORT,()=> {
     console.log(`Server created at port : ${PORT}`);
 });

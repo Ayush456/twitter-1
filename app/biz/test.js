@@ -1,4 +1,4 @@
-const queryUserFollowers = require('../biz/queryUserFollowers');
+const queryTweet = require('../biz/queryTweet')
 
 const newUser = {
     userId : '9',
@@ -11,7 +11,7 @@ const newUser = {
 
 const test = async () => {
     try {
-        const result = await queryUserFollowers.getFollowersByUserId(4);
+        const result = await queryTweet.saveTweet({userId : 1,textMsg : "hi buddy"});
         console.log(result);
         return;
     } catch (error) {
