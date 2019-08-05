@@ -1,6 +1,6 @@
 const mysqldb = require('../helpers/connectiontodb');
 
-const getFollowersById = (userId) => {
+const getFollowersById = ({userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
@@ -15,7 +15,7 @@ const getFollowersById = (userId) => {
     });
 }
 
-const getFollowedById = (userId) => {
+const getFollowedById = ({userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
@@ -30,12 +30,27 @@ const getFollowedById = (userId) => {
     });
 }
 
-const isConnected = (userOne,userTwo) => {
+const isFollowed = ({userOne,userTwo}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`select * from user_followers where user_id_1 = '${userOne}' and user_id_2 = '${userTwo}'`,(error,row) => {
+                connection.query(`select 1 from user_followers where user_id_2 = '${userOne}' and user_id_1 = '${userTwo}'`,(error,row) => {
+                    if(error) reject('error while executing query\n'+error);
+                    else if(row[0]==null) return resolve(false);
+                    resolve(true);
+                });
+            }
+        })
+    });
+}
+
+const isFollowing = ({userOne,userTwo}) => {
+    return new Promise((resolve,reject) => {
+        mysqldb.getConnection((error,connection) => {
+            if(error) reject('error while conecting db\n'+error);
+            else {
+                connection.query(`select 1 from user_followers where user_id_1 = '${userOne}' and user_id_2 = '${userTwo}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
                     else if(row[0]==null) return resolve(false);
                     resolve(true);
@@ -48,5 +63,6 @@ const isConnected = (userOne,userTwo) => {
 module.exports = {
     getFollowersByUserId : getFollowersById,
     getFollowedById : getFollowedById,
-    isConnected : isConnected
+    isFollowed : isFollowed,
+    isFollowing : isFollowing
 }

@@ -3,10 +3,6 @@ const router = express.Router();
 const TweetController = require('../controllers/tweet.controller');
 const tweet = new TweetController();
 
-// post
-// delete
-// update
-//
 
 router.get('/like/:data',tweet.like);
 
