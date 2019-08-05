@@ -1,12 +1,12 @@
 const queryTweet = require('../biz/queryTweet')
 
 const newUser = {
-    userId : '9',
-    userName : 'Suraj Jha',
-    userPassword : '12345',
-    userPasswordHash : '123456789',
-    userDob : '1998-05-03',
-    userEmail : 'jha.suraj@gmail.com'
+    userId: '9',
+    userName: 'Suraj Jha',
+    userPassword: '12345',
+    userPasswordHash: '123456789',
+    userDob: '1998-05-03',
+    userEmail: 'jha.suraj@gmail.com'
 }
 
 const test = async () => {
