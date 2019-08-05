@@ -8,7 +8,7 @@ const saveTweet = ({userId,textMsg}) => {
             else {
                 connection.query(`insert into user_tweets (tweet_msg,user_id) values ('${textMsg}','${userId}')`,(error,result) => {
                     if(error) reject('error while executing query\n'+error);
-                    resolve(result);
+                    return resolve(result);
                 });
             }
         });
@@ -55,10 +55,25 @@ const getTweet = ({tweetId,userId}) => {
                     if(error) reject('error while executing query\n'+error);
                     else if(row[0]==null) return reject('tweet does not exist');
                     resolve(row[0]);
-                })
+                });
+            }
+        });
+    });  
+}
+
+const getTweetsLikedBy = ({userId}) => {
+    return new Promise((resolve,reject) => {
+        mysqldb.getConnection((error,connection) => {
+            if(error) return reject('error while conncting db\n'+error);
+            else {
+                const query = `select * from user_tweets as ut join user_tweets_likes as utc on ut.tweet_id=utc.tweet_id where utc.user_id_by = '${userId}'`;
+                connection.query(query,(error,row) => {
+                    if(error) return reject('error while executing query\n'+error);
+                    return resolve(row);
+                });
             }
         })
-    });  
+    })
 }
 
 //checked
@@ -77,15 +92,14 @@ const getTweetById = ({tweetId}) => {
     });
 } 
 
-const getTweetByUserId = (userId) => {
+const getTweetByUserId = ({userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
-            if(error) reject('error while connecting db\n'+ error);
+            if(error) return reject('error while connecting db\n'+ error);
             else {
                 connection.query(`select * from user_tweets where user_id = '${userId}'`,(error,row) => {
-                    if(error) reject('error while executing query\n'+error);
-                    else if(row[0]==null) return resolve(undefined);
-                    resolve (row[0]);
+                    if(error) return reject('error while executing query\n'+error);
+                    resolve(row);
                 })
             }
         })
@@ -177,6 +191,7 @@ module.exports = {
     updateTweet : updateTweet,
     deleteTweet : deleteTweet,
     getTweet : getTweet,
+    getTweetsLikedBy : getTweetsLikedBy,
     getTweetById : getTweetById,
     getTweetByUserId : getTweetByUserId,
     getTweetsByUserIds : getTweetsByUserIds,

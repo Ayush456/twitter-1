@@ -62,7 +62,7 @@ const deleteLikebyTweetId = ({tweetId}) => {
 }
 
 //checked
-const getLikedByTweetId = ({tweetId}) => {
+const getLikedBy = ({tweetId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while connecting db\n'+error);
@@ -83,5 +83,5 @@ module.exports = {
     isLiked : isLiked,
     deleteLike : deleteLike,
     deleteLikebyTweetId : deleteLikebyTweetId,
-    getLikedByTweetId : getLikedByTweetId
+    getLikedBy : getLikedBy
 }
