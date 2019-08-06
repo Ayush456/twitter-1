@@ -5,83 +5,11 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"
         integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/homepage.css">
 </head>
 
-<style>
-    #home {
-        border-right: 1px solid #BFC9CA;
-        border-left: 1px solid #BFC9CA;
-        
-    }
-
-    .hometext {
-        font-weight: 800;
-        font-size: 20px;
-        border-bottom: 1px solid #BFC9CA;
-        padding-bottom: 10px;
-        padding-left: 14px;
-    }
-
-    .user-tweet { 
-        overflow: auto;
-        padding-bottom: 10px;
-        border-bottom : 8px solid rgb(215, 227, 228);
-    }
-
-    .user-tweet h4 {
-        margin-left: 15px;
-       
-    }
-
-    #text_tweets::placeholder {
-        color: BFC9CA;
-        font-size: 20px;
-    }
-
-    #text_tweets {
-        padding-left: 10px;
-    }
-
-    .tweet-bottom {
-        margin-top: 25px;
-        margin-left: 30px;
-
-    }
-
-    .tw-bottom-left {
-        float: left;
-    }
-
-    .tw-bottom-left button {
-        border: none;
-    }
-
-    .tw-bottom-left button span {
-        color: #3498DB;
-        font-size: 20px;
-    }
-
-    .tw-bottom-left button i {
-        font-size: 20px;
-        color: #3498DB;
-    }
-
-    .tw-bottom-right {
-        float: right;
-        padding-right: 14px;
-    }
-
-    .tw-bottom-right button {
-        height: 36px;
-        width: 90px;
-        border-radius: 18px;
-        background-color: #3498DB;
-        color: white;
-        font-weight: bold;
-        font-size: 14px;
-    }
-
-</style>
 
 <body>
     <div class="row">
@@ -92,18 +20,17 @@
 
             <h4 class="hometext">Home</h4>
             <div class="user-tweet">
-                <h5 style="  opacity: 0.7; padding-left: 14px;">Enter your tweet message here</h5>
+                <h5 style="  opacity: 0.7; padding-left: 14px;">Enter your tweet message below</h5>
                 <div class="tw-body">
                     <i style="float: left;width:10%;font-size:30px; padding-left: 14px;" class="glyphicon glyphicon-envelope"></i>
-                    <input id="text_tweets" type="text" style="float: right;width:90%;height:70px;border:none"
-                        placeholder="Whats Happening?">
+                    <input id="text_tweets" type="text" style="float:right;width:90%;height:70px;border:none" placeholder="Whats Happening?">
                     <div class="tweet-bottom">
                         <div class="tw-bottom-left">
                             <button><i class="glyphicon glyphicon-picture"></i></button>
                             <button><span>&#128512;</span></button>
                         </div>
                         <div class="tw-bottom-right">
-                            <button>Tweet</button>
+                            <button id="tweet-submit">Tweet</button>
                         </div>
                     </div>
                 </div>
@@ -128,6 +55,18 @@
         $(".vertical-nav-left li button").eq(index).addClass('active');
 
     });
+
+    $('#tweet-submit').on('click',function(){
+        let text_tweets = $('#text_tweets').val();
+        tw_len = text_tweets.length;
+       if(tw_len > 280){
+           
+           toastr.options.preventDuplicates = true;
+           toastr.warning(`tweet message exceeded length 280 characters! ${tw_len} > 280`);
+       }else{
+           
+       }
+});
 </script>
 
 </html>

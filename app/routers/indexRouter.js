@@ -5,9 +5,9 @@ var AuthContoller = require('../controllers/auth.controller.js');
 let authController = new AuthContoller();
 
 
-router.get('/',authController.login);
 
-router.get('/login',authController.login);
+
+router.get('/',authController.login);
 
 router.post('/login',authController.checkLoginReg);
 
@@ -15,15 +15,7 @@ router.get('/signup',(req,res)=>{
     res.render('signUp');
 });
 // /user
-router.post('/signup', async (request,response) => {
-    const user = request.body;
-    try {
-        console.log(user);
-        response.status(201).send(user);
-    } catch(error) {
-        response.status(400).send(error);
-    }
-});
+router.post('/signup', authController.signupReq);
 
 
 
