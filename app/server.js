@@ -31,7 +31,7 @@ app.use(express.static(publicDirectoryPath));
 app.use(express.static(viewsPath));
 app.use(express.static(authPath));
 
-//base routes
+//base routesc
 app.use('/',indexRoute);       //for login-signin-auth  
 app.use('/user',twitterRoute);        //for home-profile-logout-tweet
 app.use('/comment',commentRoute);     //search edit feed trend who_to_follow activity
