@@ -4,11 +4,12 @@ const mysqldb = require('../helpers/connectiontodb');
 const getFollowers = ({userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
-            if(error) return reject('error while conecting db\n'+error);
+            if(error) reject('error while conecting db\n'+error);
             else {
                 const query = `select user_name as userName,user_id as userId  from user u join user_followers uf on u.user_id = uf.user_id_1 where uf.user_id_2 = '${userId}' order by atTime desc limit 10`;
                 connection.query(query,(error,row) => {
-                    if(error) return reject('error while executing query\n'+error);
+                    if(error) reject('error while executing query\n'+error);
+                    if(row.length==0) return resolve(false);
                     resolve(row);
                 });
             }
@@ -25,7 +26,8 @@ const getFollowings = ({userId}) => {
                 const query = `select user_name as userName,user_id as userId  from user u join user_followers uf on u.user_id = uf.user_id_2 where uf.user_id_1 = '${userId}' order by atTime desc limit 10`
                 connection.query(query,(error,row) => {
                     if(error) return reject('error while executing query\n'+error);
-                    resolve(row);
+                    if(row.length==0) return resolve(false);
+                    return resolve(row);
                 });
             }
         })
@@ -40,8 +42,8 @@ const isFollowed = ({userOne,userTwo}) => {
             else {
                 connection.query(`select 1 from user_followers where user_id_2 = '${userOne}' and user_id_1 = '${userTwo}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
-                    else if(row[0]==null) return resolve(false);
-                    resolve(true);
+                    else if(row.length==0) return resolve(false);
+                    return resolve(true);
                 });
             }
         })
@@ -56,7 +58,7 @@ const isFollowing = ({userOne,userTwo}) => {
             else {
                 connection.query(`select 1 from user_followers where user_id_1 = '${userOne}' and user_id_2 = '${userTwo}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
-                    else if(row[0]==null) return resolve(false);
+                    else if(row.length==0) return resolve(false);
                     resolve(true);
                 });
             }
@@ -70,9 +72,9 @@ const startFollowing  = ({userOne,userTwo}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`insert into user_followers(user_id_1,user_id_2) values ('${userOne}','${userTwo}')`,(error) => {
+                connection.query(`insert into user_followers(user_id_1,user_id_2) values ('${userOne}','${userTwo}')`,(error,result) => {
                     if(error) reject('error while executing query\n'+error);
-                    resolve();
+                    resolve(result);
                 });
             }
         })

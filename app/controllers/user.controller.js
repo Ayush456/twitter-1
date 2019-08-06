@@ -1,16 +1,20 @@
 const queryFollow = require('../biz/queryFollow');
+const queryUser = require('../biz/queryUser');
 
 class UserController {
 
     async follow(req,res) {
         try {
             const data = JSON.parse(req.params.data);
-            console.log(data);
-            const result = await queryFollow.isFollowing(data);
-            console.log(result);
-            if(result) return res.send();
-            await queryFollow.startFollowing(data);
-            res.send();
+            const user1 = queryUser.getUserById({userId:data.userOne});
+            const user2 = queryUser.getUserById({userId:data.userTwo});
+            if(user1._isactive && user2._isactive) {
+                const result = await queryFollow.isFollowing(data);
+                if(result) return res.send();
+                await queryFollow.startFollowing(data);
+                return res.send();
+            }
+            return res.status(418).send();
         } catch(error) {
             res.status(500).send(error);
         }
@@ -19,9 +23,14 @@ class UserController {
     async unfollow(req,res) {
         try {
             const data = JSON.parse(req.params.data);
-            const result = await queryFollow.isFollowing(data);
-            if(result) await queryFollow.stopFollowing(data);
-            res.send(); 
+            const user1 = queryUser.getUserById({userId:data.userOne});
+            const user2 = queryUser.getUserById({userId:data.userTwo});
+            if(user1._isactive && user2._isactive) {
+                const result = await queryFollow.isFollowing(data);
+                if(result) await queryFollow.stopFollowing(data);
+                return res.send();
+            }
+            return res.status(418).send();
         } catch (error) {
             res.status(500).send(error);
         }

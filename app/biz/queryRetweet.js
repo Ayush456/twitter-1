@@ -6,9 +6,9 @@ const saveRetweet = ({fromTweetId,tweetId}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while connecting database\n'+error);
             else {
-                connection.query(`insert into user_tweets_retweets (from_tweet_id,tweet_id) values ('${fromTweetId}','${tweetId}')`,(error) => {
+                connection.query(`insert into user_tweets_retweets (from_tweet_id,tweet_id) values ('${fromTweetId}','${tweetId}')`,(error,result) => {
                     if(error) reject('error while executing query\n'+error);
-                    resolve();
+                    resolve(result);
                 });
             }
         });
@@ -37,7 +37,7 @@ const getFromTweet = ({tweetId}) => {
             else {
                 connection.query(`select from_tweet_id from user_tweets_retweets where tweet_id = '${tweetId}'`,(error,result) => {
                     if(error) reject('error while executing query\n'+error);
-                    if(result[0]==null) return resolve(null);
+                    if(result.length==0) return resolve(false);
                     resolve(result[0].from_tweet_id);
                 });
             }

@@ -11,9 +11,9 @@ class DataController {
         try{
             const data = JSON.parse(req.params.data);
             const result = await queryFollow.isFollowing(data);
-            res.send(result);
+            return res.send(result);
         } catch(error) {
-            res.status(500).send(error);
+            return res.status(500).send(error);
         } 
     }
 
@@ -22,9 +22,9 @@ class DataController {
         try{
             const data = JSON.parse(req.params.data);
             const result = await queryFollow.isFollowed(data);
-            res.send(result);
+            return res.send(result);
         } catch(error) {
-            res.status(500).sendfile(error);
+            return res.status(500).sendfile(error);
         } 
     }
 
@@ -35,11 +35,11 @@ class DataController {
             const user = await queryUser.getUserById(data);
             if(user) {
                 let userProfile = await dataOperation.userToProfile(user);
-                res.send(userProfile);
+                return res.send(userProfile);
             }
-            res.send("User does not exist");
+            return res.send("User does not exist");
         } catch(error) {
-            res.status(500).send(error);
+            return res.status(500).send(error);
         }
     }
 
@@ -47,11 +47,14 @@ class DataController {
     async getFollowers(req,res) {
         try {
             const data = JSON.parse(req.params.data);
-            const followers = await queryFollow.getFollowers(data);
-            console.log(followers);
-            res.send(followers);
+            const user = queryUser.getUserById(data);
+            if(user) {
+                const followers = await queryFollow.getFollowers(data);
+                return res.send(followers);
+            }
+            return res.status(418).send();
         } catch(error) {
-            res.status(500).send();
+            return res.status(500).send();
         }
     }
 
@@ -59,10 +62,14 @@ class DataController {
     async getFollowings(req,res) {
         try {
             const data = JSON.parse(req.params.data);
-            const followings = await queryFollow.getFollowings(data);
-            res.send(followings);
+            const user = queryUser.getUserById(data);
+            if(user) {
+                const followings = await queryFollow.getFollowings(data);
+                return res.send(followings);
+            }
+            return res.status(418).send();
         } catch(error) {
-            res.status(500).send(error);
+            return res.status(500).send(error);
         }
     }
 
@@ -70,20 +77,31 @@ class DataController {
     async getTweets(req,res) {
         try {
             const data = JSON.parse(req.params.data);
-            const result = await queryTweet.getTweetByUserId(data);
-            res.send(result)
+            const user = queryUser.getUserById(data);
+            if(user) {
+                const result = await queryTweet.getTweetByUserId(data);
+                return res.send(result)
+            }
+            return res.status(418).send();
+
         } catch(error) {
-            res.status(500).send(error);
+            return res.status(500).send(error);
         }
     }
 
     // checked
     async getLikes(req,res) {
         try {
-            const result = await queryTweet.getTweetsLikedBy(JSON.parse(req.params.data));
-            res.send(result);
+            const data = JSON.parse(req.params.data);
+            const user = queryUser.getUserById(user);
+            if(user) {
+                const result = await queryTweet.getTweetsLikedBy();
+                return res.send(result);
+            }
+            return res.status(418).send();
+
         } catch (error) {
-            res.status(500).send(error)
+            return res.status(500).send(error)
         }
     }
 

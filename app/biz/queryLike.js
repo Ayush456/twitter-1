@@ -6,9 +6,9 @@ const insertLike = ({userId,tweetId}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while connecting db\n'+error);
             else {
-                connection.query(`insert into user_tweets_likes(tweet_id,user_id_by) values ('${tweetId}','${userId}')`,(error) => {
+                connection.query(`insert into user_tweets_likes(tweet_id,user_id_by) values ('${tweetId}','${userId}')`,(error,result) => {
                     if(error)  reject('error while executing query\n'+error);
-                    resolve();
+                    return resolve(result);
                 })
             }
         });
@@ -23,8 +23,8 @@ const isLiked = ({userId,tweetId}) => {
             else {
                 connection.query(`select 1 from user_tweets_likes where user_id_by = '${userId}' and tweet_id = '${tweetId}'`,(error,result) => {
                     if(error)  reject('error while executing query\n'+error);
-                    else if(result[0]==null) return resolve(false);
-                    resolve(true);
+                    else if(result.length==0) return resolve(false);
+                    return resolve(true);
                 })
             }
         });
@@ -39,7 +39,7 @@ const deleteLike = ({userId,tweetId}) => {
             else {
                 connection.query(`delete from user_tweets_likes where user_id_by = '${userId}' and tweet_id = '${tweetId}'`,(error) => {
                     if(error)  reject('error while executing query\n'+error);
-                    resolve();
+                    return resolve();
                 })
             }
         });
@@ -54,7 +54,7 @@ const deleteLikebyTweetId = ({tweetId}) => {
             else {
                 connection.query(`delete from user_tweets_likes where tweet_id = '${tweetId}'`,(error) => {
                     if(error)  reject('error while executing query\n'+error);
-                    resolve();
+                    return resolve();
                 })
             }
         });
@@ -70,8 +70,8 @@ const getLikedBy = ({tweetId}) => {
                 //select user_name from user where user_id in (
                 connection.query(`select user_name from user where user_id in (select user_id_by from user_tweets_likes where tweet_id = '${tweetId}')`,(error,result) => {
                     if(error)  reject('error while executing query\n'+error);
-                    else if(result[0]==null) return resolve(null);
-                    resolve(result);
+                    else if(result.length==0) return resolve(false);
+                    return resolve(result);
                 })
             }
         });

@@ -6,13 +6,12 @@ const createUser = ({userId,userName,userPassword,userPasswordHash,userDob,userE
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-
-                connection.query(`insert into user (user_id,user_name,user_password,user_password_hash,user_dob,user_email,_isactive) values ('${userId}','${userName}','${userPassword}','${userPasswordHash}','${userDob}','${userEmail}','1')`,(error) => {
+                connection.query(`insert into user (user_id,user_name,user_password,user_password_hash,user_dob,user_email,_isactive) values ('${userId}','${userName}','${userPassword}','${userPasswordHash}','${userDob}','${userEmail}','1')`,(error,result) => {
                     if(error) reject('error while executing query\n'+error);
-                    resolve();
+                    resolve(result);
                 });
             }
-        })
+        });
     });
 }
 
@@ -24,11 +23,11 @@ const getUserById = ({userId}) => {
             else {
                 connection.query(`select * from user where user_id = '${userId}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
-                    else if(row[0]==null) return resolve(null);
+                    else if(row.length==0) return resolve(false);
                     resolve(row[0]);
                 });
             }
-        })
+        });
     });
 }
 
@@ -39,11 +38,11 @@ const getUserByEmail = ({userEmail}) => {
             else {
                 connection.query(`select * from user where user_email = '${userEmail}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
-                    else if(row[0]==null) return resolve(null);
+                    else if(row.length==0) return resolve(false);
                     resolve(row[0]);
                 });
             }
-        })
+        });
     });
 }
 
@@ -58,7 +57,7 @@ const updateUserProfile = ({userId,picturePath}) => {
                     resolve();
                 });
             }
-        })
+        });
     });
 }
 
@@ -72,7 +71,7 @@ const updateUserCover = ({userId,picturePath}) => {
                     resolve();
                 });
             }
-        })
+        });
     });
 }
 
@@ -86,7 +85,7 @@ const updateUserStatus = ({userId,newStatus}) => {
                     resolve();
                 });
             }
-        })
+        });
     });
 }
 
@@ -100,7 +99,7 @@ const increaseCount = (column,{userId}) => {
                     resolve();
                 });
             }
-        })
+        });
     });
 }
 
@@ -114,7 +113,7 @@ const decreaseCount = (column,{userId}) => {
                     resolve();
                 });
             }
-        })
+        });
     });
 }
 
@@ -128,7 +127,7 @@ const deleteUser = ({userId}) => {
                     resolve();
                 });
             }
-        })
+        });
     });
 }
  

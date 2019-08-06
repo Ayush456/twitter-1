@@ -53,13 +53,13 @@ const getTweet = ({tweetId,userId}) => {
             else {
                 connection.query(`select * from user_tweets where tweet_id = '${tweetId}' and user_id = '${userId}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
-                    else if(row[0]==null) return reject('tweet does not exist');
-                    resolve(row[0]);
+                    if(row.length == 0) return resolve(false);
+                    return resolve(row[0]);
                 });
             }
         });
     });  
-}
+} 
 
 // checked
 const getTweetsLikedBy = ({userId}) => {
@@ -67,9 +67,10 @@ const getTweetsLikedBy = ({userId}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) return reject('error while conncting db\n'+error);
             else {
-                const query = `select * from user_tweets as ut join user_tweets_likes as utc on ut.tweet_id=utc.tweet_id where utc.user_id_by = '${userId}'`;
+                const query = `select * from user_tweets as ut join user_tweets_likes as utc on ut.tweet_id = utc.tweet_id where utc.user_id_by = '${userId}'`;
                 connection.query(query,(error,row) => {
                     if(error) return reject('error while executing query\n'+error);
+                    if(row.length==0) return resolve(false);
                     return resolve(row);
                 });
             }
@@ -85,7 +86,7 @@ const getTweetById = ({tweetId}) => {
             else {
                 connection.query(`select * from user_tweets where tweet_id = '${tweetId}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
-                    else if(row[0]==null) return resolve(undefined);
+                    else if(row.length == 0) return resolve(false);
                     resolve (row[0]);
                 })
             }
@@ -101,6 +102,7 @@ const getTweetByUserId = ({userId}) => {
             else {
                 connection.query(`select * from user_tweets where user_id = '${userId}'`,(error,row) => {
                     if(error) return reject('error while executing query\n'+error);
+                    if(row.length == 0) return resolve(false);
                     resolve(row);
                 })
             }
@@ -117,7 +119,7 @@ const getTweetsOfFriends = ({userId,lastTweetCount}) => {
                 const query = `select tweet_id as tweetId,ut.user_id as userId,u.user_name as userName,tweet_msg as tweetText,tweet_like_count as likes,tweet_comment_count as comments,tweet_retweet_count as retweets,ut.atTime from user_tweets as ut join user_followers as uf on ut.user_id = uf.user_id_2 join user as u on u.user_id = uf.user_id_2 where uf.user_id_1 = '${userId}' order by ut.atTime limit ${lastTweetCount},10`;
                 connection.query(query,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
-                    else if(row[0]==null) return resolve(null);
+                    else if(row.length==0) return resolve(false);
                     resolve (row);
                 });
             }

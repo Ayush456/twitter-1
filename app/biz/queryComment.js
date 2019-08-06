@@ -6,9 +6,9 @@ const saveComment = ({tweetId,userId,textMsg}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`insert into user_tweets_comments (tweet_id,user_id_by,comment_msg) values ('${tweetId}','${userId}','${textMsg}')`,(error) => {
+                connection.query(`insert into user_tweets_comments (tweet_id,user_id_by,comment_msg) values ('${tweetId}','${userId}','${textMsg}')`,(error,result) => {
                     if(error) reject('error while executing query\n'+error);
-                    resolve();
+                    resolve(result);
                 });
             }
         });
@@ -58,34 +58,17 @@ const updateComment = ({tweetId,userId,textMsg}) => {
     });
 }
 
-//your activity
-const commentsByUserId = (userId) => {
+// tweetId + comments msg + comment time + user-name
+const commentsByTweetId = ({tweetId}) => {
     return new Promise ((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while connecting db\n'+error);
             else {
-                connection.query(`select (tweet_id,comment_msg,comment_time) from user_tweets_comments where user_id_by = '${userId}' `,(error,result) => {
-                    if(error) reject('error while conecting db\n'+error);
-                    else if(result[0]==null) return resolve(null);
-                    resolve(result[0]);
-                });
-            }
-        });
-    });
-}
-
-//comments msg + comment time + user-name
-const commentsByTweetId = (tweetId) => {
-    return new Promise ((resolve,reject) => {
-        mysqldb.getConnection((error,connection) => {
-            if(error) reject('error while connecting db\n'+error);
-            else {
-                const query = `select m.comment_msg,m.comment_time,
-                               (select u.user_name from user as u where m.user_id_by = u.user_id) as name
-                               from user_tweets_comment as m where m.tweet_id = '${tweetId}'`;
+                const query = `
+                select m.tweet_id as tweetId,m.comment_msg as comment,m.atTime as time,(select u.user_name from user as u where m.user_id_by = u.user_id) as name from user_tweets_comments as m where m.tweet_id = '${tweetId}' order by time limit 20`;
                 connection.query(query,(error,result) => {
                     if(error) reject('error while conecting db\n'+error);
-                    else if(result[0]==null) return sresolve(nulll);
+                    if(result.length==0) return resolve(false);
                     resolve(result);
                 });
             }
@@ -98,8 +81,7 @@ module.exports = {
     deleteComment : deleteComment,
     deleteCommentsByTweetId : deleteCommentsByTweetId,
     updateComment : updateComment,
-    commentsByTweetId : commentsByTweetId,
-    commentsByUserId : commentsByUserId
+    commentsByTweetId : commentsByTweetId
 }
 
 
