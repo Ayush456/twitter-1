@@ -2,6 +2,8 @@ const queryFollow = require('../biz/queryFollow');
 const queryUser = require('../biz/queryUser');
 const dataOperation = require('../biz/dataOperation');
 const queryTweet = require('../biz/queryTweet');
+const queryComment = require('../biz/queryComment');
+const queryLike = require('../biz/queryLike');
 class DataController {
 
     //checked
@@ -86,9 +88,20 @@ class DataController {
     }
 
     async getFeeds(req,res) {
-        
-    }
-
+        try {
+            const data = JSON.parse(req.params.data);
+            const tweets = await queryTweet.getTweetsOfFriends(data);
+            // const likes = await queryLike.getLikesOfFriends(data);
+            // const comments = await queryComment.getCommnetsOfFriends(data);  
+            let feeds = {};
+            feeds.tweets = result;
+            feeds.lastTweetCount = result.length;
+            res.send(feeds);
+        } catch(error) {
+            res.status(500).sendfile(error);
+        }
+    }   
+     
     async getFeed(req,res) {
 
     }

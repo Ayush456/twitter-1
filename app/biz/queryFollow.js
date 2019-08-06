@@ -1,11 +1,12 @@
 const mysqldb = require('../helpers/connectiontodb');
 
+//checked
 const getFollowers = ({userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) return reject('error while conecting db\n'+error);
             else {
-                const query = `select user_name as userName,user_id as userId  from user u join user_followers uf on u.user_id = uf.user_id_2 where uf.user_id_1 = '${userId}' order by atTime desc limit 10`;
+                const query = `select user_name as userName,user_id as userId  from user u join user_followers uf on u.user_id = uf.user_id_1 where uf.user_id_2 = '${userId}' order by atTime desc limit 10`;
                 connection.query(query,(error,row) => {
                     if(error) return reject('error while executing query\n'+error);
                     resolve(row);
@@ -15,12 +16,13 @@ const getFollowers = ({userId}) => {
     });
 }
 
+// checked
 const getFollowings = ({userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) return reject('error while conecting db\n'+error);
             else {
-                const query = `select user_name as userName,user_id as userId  from user u join user_followers uf on u.user_id = uf.user_id_1 where uf.user_id_2 = '${userId}' order by atTime desc limit 10`
+                const query = `select user_name as userName,user_id as userId  from user u join user_followers uf on u.user_id = uf.user_id_2 where uf.user_id_1 = '${userId}' order by atTime desc limit 10`
                 connection.query(query,(error,row) => {
                     if(error) return reject('error while executing query\n'+error);
                     resolve(row);
@@ -30,6 +32,7 @@ const getFollowings = ({userId}) => {
     });
 }
 
+// checked
 const isFollowed = ({userOne,userTwo}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
@@ -45,6 +48,7 @@ const isFollowed = ({userOne,userTwo}) => {
     });
 }
 
+//checked
 const isFollowing = ({userOne,userTwo}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
@@ -60,6 +64,7 @@ const isFollowing = ({userOne,userTwo}) => {
     });
 }
 
+//checked
 const startFollowing  = ({userOne,userTwo}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
@@ -74,6 +79,7 @@ const startFollowing  = ({userOne,userTwo}) => {
     });
 }
 
+//checked
 const stopFollowing  = ({userOne,userTwo}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {

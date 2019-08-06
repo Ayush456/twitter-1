@@ -1,6 +1,7 @@
 const queryTweet = require('../biz/queryTweet');
 const queryUser = require('../biz/queryUser');
 const queryFollow = require('../biz/queryFollow');
+const queryHashtag = require('../biz/queryHashtag');
 
 const newUser = {
     userId: '9',
@@ -13,7 +14,8 @@ const newUser = {
 
 const test = async () => {
     try {
-        const result = await queryTweet.getTweetsLikedBy({userId:3});
+        // const result = await queryHashtag.getTweetByHashtag({hashTag:'food',lastTweetCount:0});
+        const result = await queryTweet.saveTweet({userId : 1,textMsg : 'goo buuddy'});
         console.log(result);
         return;
     } catch (error) {
