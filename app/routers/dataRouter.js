@@ -1,27 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const UserController = require('../controllers/data.controller');
-const user = new UserController();
+const DataController = require('../controllers/data.controller');
+const data = new DataController();
 
-router.get('/isfollowing/:data',user.isFollowing);  //{userOne,userTwo}
+router.get('/isfollowing/:data',data.isFollowing);  //{userOne,userTwo}
 
-router.get('/isfollowed/:data',user.isFollowed);   //{userOne,userIdTwo}
+router.get('/isfollowed/:data',data.isFollowed);   //{userOne,userIdTwo}
 
-router.get('/profile/:data',user.getProfile);      //{userID}
+router.get('/profile/:data',data.getProfile);      //{userID}
 
-router.get('/followers/:data',user.getFollowers);    //{userId}
+router.get('/followers/:data',data.getFollowers);    //{userId}
 
-router.get('/following/:data',user.getFollowings);     //{userId}
+router.get('/followings/:data',data.getFollowings);     //{userId}
 
 // router.post('/profile/edit',user.);      //{userId,....}
 
-router.get('/tweets/:data',user.getTweets);       //{userId}
+router.get('/tweets/:data',data.getTweets);       //{userId}
 
-router.get('/likes/:data',user.getLikes);        //{userId}   
+router.get('/likes/:data',data.getLikes);        //{userId}   
 
-router.get('/feeds/:data',user.getFeeds);       //{userId}
+router.get('/feeds/:data',data.getFeeds);       //{userId}
 
-router.get('/feed/:data',user.getFeed);         //{tweetId}
+router.get('/feed/:data',data.getFeed);         //{tweetId}
 
 
 

@@ -21,10 +21,10 @@ app.use(express.urlencoded({ extended: false }));
 
 //routes included
 const indexRoute = require('./routers/indexRouter');
-const twitterRoute = require('./routers/twitterRouter');
 const commentRoute = require('./routers/commentRouter');
 const tweetRoute = require('./routers/tweetRouter');
 const dataRoute = require('./routers/dataRouter');
+const userRoute = require('./routers/userRouter');
 
 //required by express
 app.use(express.static(publicDirectoryPath));
@@ -33,10 +33,10 @@ app.use(express.static(authPath));
 
 //base routesc
 app.use('/',indexRoute);       //for login-signin-auth  
-app.use('/user',twitterRoute);        //for home-profile-logout-tweet
 app.use('/comment',commentRoute);     //search edit feed trend who_to_follow activity
 app.use('/tweet',tweetRoute);
 app.use('/data',dataRoute);
+app.use('/user',userRoute);
 
 //port created
 const PORT = process.env.PORT || 5000;
