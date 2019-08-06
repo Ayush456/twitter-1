@@ -62,7 +62,7 @@ const deleteLikebyTweetId = ({tweetId}) => {
 }
 
 //checked
-const getLikedByTweetId = ({tweetId}) => {
+const getLikedBy = ({tweetId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while connecting db\n'+error);
@@ -78,10 +78,24 @@ const getLikedByTweetId = ({tweetId}) => {
     });
 }
 
+// const getLikseOfFriends = () => {
+//     return new Promise((resolve,reject) => {
+//         mysqldb.getConnection((error,connection) => {
+//             if(error) reject('error while connecting db\n'+error);
+//             else {
+//                 const query = 'select ut.tweet_id as tweetId,ut.tweet_msg as tweetText,ut.'
+//                 connection.query(query,(error,result) => {
+//                     if(error)  reject('error while executing query\n'+error);
+//                     resolve(result);
+//                 })
+//             }
+//         });
+//     });
+// }
 module.exports = {
     insertLike : insertLike,
     isLiked : isLiked,
     deleteLike : deleteLike,
     deleteLikebyTweetId : deleteLikebyTweetId,
-    getLikedByTweetId : getLikedByTweetId
+    getLikedBy : getLikedBy
 }

@@ -16,6 +16,7 @@ const createUser = ({userId,userName,userPassword,userPasswordHash,userDob,userE
     });
 }
 
+//checked and using
 const getUserById = ({userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
