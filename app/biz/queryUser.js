@@ -31,6 +31,20 @@ const getUserById = ({userId}) => {
     });
 }
 
+const getUserByName = ({key,offset}) => {
+    return new Promise((resolve,reject) => {
+        mysqldb.getConnection((error,connection) => {
+            if(error) reject('error while conecting db\n'+error);
+            else {
+                connection.query(`select user_id userId,user_name userName,user_status userStatus,user_pp userPPPath from user where user_name = '${key}' order by userName limit ${offset},10`,(error,row) => {
+                    if(error) reject('error while executing query\n'+error);
+                    return resolve(row);
+                });
+            }
+        });
+    });
+}
+
 const getUserByEmail = ({userEmail}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
@@ -46,7 +60,7 @@ const getUserByEmail = ({userEmail}) => {
     });
 }
 
-const updateUserProfile = ({userId,picturePath}) => {
+const updateUserPP = ({userId,picturePath}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
@@ -61,7 +75,7 @@ const updateUserProfile = ({userId,picturePath}) => {
     });
 }
 
-const updateUserCover = ({userId,picturePath}) => {
+const updateUserCP = ({userId,picturePath}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
@@ -75,12 +89,12 @@ const updateUserCover = ({userId,picturePath}) => {
     });
 }
 
-const updateUserStatus = ({userId,newStatus}) => {
+const updateUserProfile = ({userId,userStatus,userDob}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`update user set user_status = '${newStatus}' where user_id = '${userId}'`,(error) => {
+                connection.query(`update user set user_status = '${userStatus}',user_dob = '${userDob}' where user_id = '${userId}'`,(error) => {
                     if(error) reject('error while executing query\n'+error);
                     resolve();
                 });
@@ -135,9 +149,10 @@ module.exports = {
     createUser : createUser,
     getUserById : getUserById,
     getUserByEmail : getUserByEmail,
-    UpdateUserProfile : updateUserProfile,
-    updateUserCover : updateUserCover,
-    updateUserStatus : updateUserStatus,
+    getUserByName : getUserByName,
+    updateUserPP : updateUserPP,
+    updateUserCP : updateUserCP,
+    updateUserProfile : updateUserProfile,
     increaseCount : increaseCount,
     decreaseCount : decreaseCount,
     deleteUser : deleteUser

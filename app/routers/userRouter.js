@@ -10,6 +10,8 @@ router.post('/unfollow',userValidator.validate('unfollow'),user.unfollow);  // {
 
 router.put('/edit_profile',userValidator.validate('editProfile'),user.editProfile);  //{userId,userDob,userStatus};
 
+router.put('/delete',userValidator.validate('deleteAccount'),user.deleteAccount);    //{userId}
+
 // router.put('/edit_pp/:data',user.editPP);                //{userId,userPP,...} --
 
 // router.put('/edit_cp/:data',user.editCP);                //{userId....} --

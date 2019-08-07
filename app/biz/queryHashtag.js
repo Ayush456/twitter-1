@@ -38,15 +38,14 @@ const deleteHashTags = ({tweetId}) => {
     });
 }
 
-const getTweetByHashtag = ({hashTag,lastTweetCount}) => {
-    return new Promise ((resolve,rejec) => {
+const getTweetByHashtag = ({key,offset}) => {
+    return new Promise ((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while connecting to db\n'+error);
             else {
-                const query = `select ut.tweet_id as tweetId,ut.user_id as userId,u.user_name as userName,tweet_msg as tweetText,tweet_like_count as likes,tweet_comment_count as comments,tweet_retweet_count as retweets,ut.atTime from user_tweets as ut join user_tweets_hashtag as uth on ut.tweet_id = uth.tweet_id join user as u on u.user_id = ut.user_id where uth.hash_tag = '${hashTag}' order by ut.atTime limit ${lastTweetCount},10`;
+                const query = `select ut.tweet_id as tweetId,ut.user_id as userId,u.user_name as userName,tweet_msg as tweetText,tweet_like_count as likes,tweet_comment_count as comments,tweet_retweet_count as retweets,ut.atTime from user_tweets as ut join user_tweets_hashtag as uth on ut.tweet_id = uth.tweet_id join user as u on u.user_id = ut.user_id where uth.hash_tag = '${key}' order by ut.atTime limit ${offset},10`;
                 connection.query(query,(error,result) => {
                     if(error) reject('error while executing query\n'+error);
-                    if(result.length==0) return resolve(false);
                     return resolve(result);
                 });
             }

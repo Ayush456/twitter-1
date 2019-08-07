@@ -105,13 +105,13 @@ class DataController {
             const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
             if(user) {
-                const result = await queryTweet.getTweetsLikedBy();
+                const result = await queryTweet.getTweetsLikedBy(data);
                 return res.send(result);
             }
             return res.status(418).send();
 
         } catch (error) {
-            return res.status(500).send(error)
+            return res.status(500).sendfile(error)
         }
     }
 
