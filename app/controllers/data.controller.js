@@ -118,12 +118,13 @@ class DataController {
     async getFeeds(req,res) {
         try {
             const data = { userId : req.params.userId, lastTweetCount : req.params.lastTweetCount };
+            
             const tweets = await queryTweet.getTweetsOfFriends(data);
             // const likes = await queryLike.getLikesOfFriends(data);
             // const comments = await queryComment.getCommnetsOfFriends(data);  
             let feeds = {};
             feeds.tweets = tweets;
-            feeds.lastTweetCount = result.tweets;
+            feeds.lastTweetCount = tweets.length;
             res.send(feeds);
         } catch(error) {
             res.status(500).sendfile(error);
