@@ -56,8 +56,7 @@ $(document).on('click','#sign-up',function(){
                     htmlleft = `
                     <div class="logo-pack">
                     <img id="logo" src="https://img.icons8.com/color/48/000000/twitter.png"> 
-                   
-                </div>
+                    </div>
             <div class="vertical-nav-left">
                <ul>
                    <li><button class="active"> <i class="glyphicon glyphicon-home"></i> Home</button> </li>
@@ -101,14 +100,18 @@ $(document).on('click','#sign-up',function(){
                                     <button><span>&#128512;</span></button>
                                 </div>
                                 <div class="tw-bottom-right">
-                                    <button id="tweet-submit">Tweet</button>
+                                <button id="tweet-submit" value='${user.user_id}'>Tweet</button>
                                 </div>
                             </div>
                         </div>
-                    </div></div>`;
+                    </div></div>
+                    <div id="displayTweets"></div>
+                    `;
                     $('.col-md-3').html(htmlleft);
                     $('.col-md-4').html(htmlRight);
                     $('.col-md-5').html(htmlMid);
+                    localStorage.setItem('user_id',user.user_id);
+                    localStorage.setItem('user_password',user.user_password);
             }
         }).fail(function(jqXHR, textStatus, error){
             console.log('some error happened!');

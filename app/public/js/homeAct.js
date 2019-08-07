@@ -22,8 +22,8 @@ $(document).on('click','#tweet-submit',function(){
         url: window.location+'tweet',
         type: "POST",
         data: { userId: user_id,textMsg: tweet_text, hashTags: hashtags },
-        success: function(dataAfterTweetPost){
-
+        success: function(dataAfterTweetPost){      
+            
         },
 
     }).fail(function(e){
