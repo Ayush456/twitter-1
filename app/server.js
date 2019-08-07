@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
 const app = express();
+// const expressValidator = require('express-validator');
 
 //default paths
 const publicDirectoryPath = path.join(__dirname, 'public');
@@ -18,6 +19,7 @@ hbs.registerPartials(layoutsPath);
 // for body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// app.use(expressValidator);
 
 //routes included
 const indexRoute = require('./routers/indexRouter');

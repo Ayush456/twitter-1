@@ -1,13 +1,15 @@
 const queryFollow = require('../biz/queryFollow');
-
+const { validationResult } = require('express-validator/check');
 class UserController {
 
     async follow(req,res) {
         try {
-            const data = JSON.parse(req.params.data);
-            console.log(data);
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
+            const data = req.body;
             const result = await queryFollow.isFollowing(data);
-            console.log(result);
             if(result) return res.send();
             await queryFollow.startFollowing(data);
             res.send();
