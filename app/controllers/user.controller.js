@@ -91,6 +91,8 @@ class UserController {
                 return res.status(422).json({errors : errors.array() });
             }
 
+            
+
             return res.send();
         } catch(error) {
             return res.status(500).send();

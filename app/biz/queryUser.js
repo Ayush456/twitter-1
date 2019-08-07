@@ -21,7 +21,7 @@ const getUserById = ({userId}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`select * from user where user_id = '${userId}'`,(error,row) => {
+                connection.query(`select user_id,user_name,user_dob,user_email,_isactive,user_pp,user_cp,user_follow_count,user_follower_count,user_tweet_count,user_status, from user where user_id = '${userId}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
                     else if(row.length==0) return resolve(false);
                     return resolve(row[0]);
@@ -39,21 +39,6 @@ const getUserByName = ({key,offset}) => {
                 connection.query(`select user_id userId,user_name userName,user_status userStatus,user_pp userPPPath from user where user_name = '${key}' order by userName limit ${offset},10`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
                     return resolve(row);
-                });
-            }
-        });
-    });
-}
-
-const getUserByEmail = ({userEmail}) => {
-    return new Promise((resolve,reject) => {
-        mysqldb.getConnection((error,connection) => {
-            if(error) reject('error while conecting db\n'+error);
-            else {
-                connection.query(`select * from user where user_email = '${userEmail}'`,(error,row) => {
-                    if(error) reject('error while executing query\n'+error);
-                    else if(row.length==0) return resolve(false);
-                    resolve(row[0]);
                 });
             }
         });
@@ -148,7 +133,6 @@ const deleteUser = ({userId}) => {
 module.exports = {
     createUser : createUser,
     getUserById : getUserById,
-    getUserByEmail : getUserByEmail,
     getUserByName : getUserByName,
     updateUserPP : updateUserPP,
     updateUserCP : updateUserCP,
