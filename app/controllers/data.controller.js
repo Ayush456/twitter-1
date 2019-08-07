@@ -9,9 +9,14 @@ class DataController {
     //checked
     async isFollowing(req,res) {
         try{
-            const data = JSON.parse(req.params.data);
-            const result = await queryFollow.isFollowing(data);
-            return res.send(result);
+            const userOne = await queryUser.getUserById({userId:req.params.userOne});
+            const userTwo = await queryUser.getUserById({userId:req.params.userTwo});
+            if(userOne && userTwo) {
+                const data = {userOne : req.params.userOne,userTwo : req.params.userTwo };
+                const result = await queryFollow.isFollowing(data);
+                return res.send(result);
+            }
+            return res.status(418).send();
         } catch(error) {
             return res.status(500).send(error);
         } 
@@ -20,9 +25,14 @@ class DataController {
     //checked
     async isFollowed(req,res) {
         try{
-            const data = JSON.parse(req.params.data);
-            const result = await queryFollow.isFollowed(data);
-            return res.send(result);
+            const userOne = await queryUser.getUserById({userId:req.params.userOne});
+            const userTwo = await queryUser.getUserById({userId:req.params.userTwo});
+            if(userOne && userTwo) {
+                const data = {userOne : req.params.userOne,userTwo : req.params.userTwo };
+                const result = await queryFollow.isFollowed(data);
+                return res.send(result);
+            }
+            return res.status(418).send();
         } catch(error) {
             return res.status(500).sendfile(error);
         } 
@@ -31,13 +41,13 @@ class DataController {
     //checked
     async getProfile(req,res) {
         try {
-            const data = JSON.parse(req.params.data);
+            const data = {userId : req.params.userId};
             const user = await queryUser.getUserById(data);
             if(user) {
-                let userProfile = await dataOperation.userToProfile(user);
+                const userProfile = dataOperation.userToProfile(user);
                 return res.send(userProfile);
             }
-            return res.send("User does not exist");
+            return res.status(418).send();
         } catch(error) {
             return res.status(500).send(error);
         }
@@ -46,7 +56,7 @@ class DataController {
     //checked
     async getFollowers(req,res) {
         try {
-            const data = JSON.parse(req.params.data);
+            const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
             if(user) {
                 const followers = await queryFollow.getFollowers(data);
@@ -61,7 +71,7 @@ class DataController {
     // Checked
     async getFollowings(req,res) {
         try {
-            const data = JSON.parse(req.params.data);
+            const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
             if(user) {
                 const followings = await queryFollow.getFollowings(data);
@@ -76,7 +86,7 @@ class DataController {
     // checked
     async getTweets(req,res) {
         try {
-            const data = JSON.parse(req.params.data);
+            const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
             if(user) {
                 const result = await queryTweet.getTweetByUserId(data);
@@ -92,8 +102,8 @@ class DataController {
     // checked
     async getLikes(req,res) {
         try {
-            const data = JSON.parse(req.params.data);
-            const user = queryUser.getUserById(user);
+            const data = {userId : req.params.userId};
+            const user = queryUser.getUserById(data);
             if(user) {
                 const result = await queryTweet.getTweetsLikedBy();
                 return res.send(result);
@@ -107,13 +117,13 @@ class DataController {
 
     async getFeeds(req,res) {
         try {
-            const data = JSON.parse(req.params.data);
+            const data = { userId : req.params.userId, lastTweetCount : req.params.lastTweetCount };
             const tweets = await queryTweet.getTweetsOfFriends(data);
             // const likes = await queryLike.getLikesOfFriends(data);
             // const comments = await queryComment.getCommnetsOfFriends(data);  
             let feeds = {};
-            feeds.tweets = result;
-            feeds.lastTweetCount = result.length;
+            feeds.tweets = tweets;
+            feeds.lastTweetCount = result.tweets;
             res.send(feeds);
         } catch(error) {
             res.status(500).sendfile(error);
@@ -121,7 +131,15 @@ class DataController {
     }   
      
     async getFeed(req,res) {
+        try {
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
 
+        } catch(error) {
+
+        }
     }
 
 }

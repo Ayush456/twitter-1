@@ -4,6 +4,8 @@ const queryLike = require('../biz/queryLike');
 const queryRetweet = require('../biz/queryRetweet');
 const queryComment = require('../biz/queryComment');
 const queryHashtag = require('../biz/queryHashtag');
+const { validationResult } = require('express-validator');
+const dataOperation = require('../biz/dataOperation');
 
 class TweetController {
     
@@ -11,17 +13,23 @@ class TweetController {
     async saveTweet(req,res) {
         try {
             // validate token and check for user
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
+
             const data = req.body;
             const user = await queryUser.getUserById(data);
             if(user) {
+                dataOperation.hashTags(data);
                 const tweet = await queryTweet.saveTweet(data);
                 await queryHashtag.insertHashTags({tweetId : tweet.insertId,hashTags : data.hashTags});
-                await queryUser.increaseCount('user_tweet_count',{userId:data.userId});
+                await queryUser.increaseCount('user_tweet_count',{userId:data.userId})
                 return res.send();
             }
             return res.status(418).send();
         } catch(error) {
-            return res.status(500).send(error);
+            return res.status(500).sendfile(error);
         }
     }
 
@@ -29,9 +37,16 @@ class TweetController {
     async editTweet(req,res) {
         try {
             // validate token and check for user
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
+
             const data = req.body;
+
             const tweet = await queryTweet.getTweetById(data);
             if(tweet) {
+                dataOperation.hashTags(data);
                 await queryHashtag.deleteHashTags(data);
                 await queryLike.deleteLikebyTweetId(data);
                 await queryTweet.updateTweet(data);
@@ -48,7 +63,12 @@ class TweetController {
     async deleteTweet(req,res) {
         try {
             // validate token and check for user
-            const data = JSON.parse(req.params.data);
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
+
+            const data = req.body;
             const result = await queryTweet.getTweet(data);
             if(result) {
                 if(result.tweet_like_count != 0) await queryLike.deleteLikebyTweetId(data);
@@ -72,7 +92,12 @@ class TweetController {
     // checked
     async like(req,res) {
         try {
-            let  data = JSON.parse(req.params.data);
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
+
+            let  data = req.body;
             const tweet = await queryTweet.getTweetById(data);
             if(tweet) {
                 if(tweet.user_id != data.userId) {
@@ -100,22 +125,29 @@ class TweetController {
     async retweet(req,res){
         // validate token and check for user
         try {
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
+
            let data = req.body;
            const user = await queryUser.getUserById(data);
-           if(user) {
-            const result = await queryTweet.saveTweet(data);
-            const from = data.tweetId;
-            data.tweetId = result.insertId;
-            await queryHashtag.insertHashTags(data);
-            await queryTweet.markRetweeted(data);
-            await queryRetweet.makeRetweetLog({fromTweetId:from,tweetId:data.tweetId});
-            await queryTweet.increaseCount('tweet_retweet_count',{tweetId:from});
-            await queryUser.increaseCount('user_tweet_count',data);
-            return res.send();
+           const tweet = await queryTweet.getTweetById(data);
+           if(user && tweet) {
+                dataOperation.hashTags(data);
+                const result = await queryTweet.saveTweet(data);
+                const from = data.tweetId;
+                data.tweetId = result.insertId;
+                await queryHashtag.insertHashTags(data);
+                await queryTweet.markRetweeted(data);
+                await queryRetweet.makeRetweetLog({fromTweetId:from,tweetId:data.tweetId});
+                await queryTweet.increaseCount('tweet_retweet_count',{tweetId:from});
+                await queryUser.increaseCount('user_tweet_count',data);
+                return res.send();
            }
            return res.status(418).send();
         } catch(error) {
-           res.status(500).send(error);
+           return res.status(500).send(error);
        }
     }
 }

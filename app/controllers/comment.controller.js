@@ -1,12 +1,12 @@
 const queryComment = require('../biz/queryComment');
 const queryTweet = require('../biz/queryTweet');
-
+const { validationResult } = require('express-validator');
 class CommentController {
     
     // checked
     async queryComment(req,res) {
         try {
-            const data = JSON.parse(req.params.data);
+            const data = { tweetId : req.params.tweetId};
             const tweet = await queryTweet.getTweetById(data); 
             if(tweet) {
               const result = await queryComment.commentsByTweetId(data);
@@ -22,6 +22,11 @@ class CommentController {
     async saveComment(req,res) {
         try {
             // if token is not expire or exist.
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
+
             const data = req.body;
             const tweet = await queryTweet.getTweetById(data);
             if(tweet) {
@@ -39,6 +44,11 @@ class CommentController {
     async updateComment(req,res) {
         try {
         // if token is not expire or exist.
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            return res.status(422).json({errors : errors.array() });
+        }
+
         const data = req.body;
         const tweet = await queryTweet.getTweetById(data);
         if(tweet) {
@@ -55,7 +65,12 @@ class CommentController {
     async deleteComment(req,res) {
         try {
             // if token is not expire or exist.
-            const data = JSON.parse(req.params.data);
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
+
+            const data = req.body;
             const tweet = await queryTweet.getTweetById(data);
             if(tweet) {
                 await queryComment.deleteComment(req.body);

@@ -1,6 +1,6 @@
 const queryFollow = require('../biz/queryFollow');
 const queryUser = require('../biz/queryUser');
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require('express-validator');
 class UserController {
 
     async follow(req,res) {
@@ -10,9 +10,9 @@ class UserController {
                 return res.status(422).json({errors : errors.array() });
             }
 
-            const data = JSON.parse(req.body);
-            const user1 = queryUser.getUserById({userId:data.userOne});
-            const user2 = queryUser.getUserById({userId:data.userTwo});
+            const data = req.body;
+            const user1 = await queryUser.getUserById({userId:data.userOne});
+            const user2 = await queryUser.getUserById({userId:data.userTwo});
             if(user1._isactive && user2._isactive) {
                 const result = await queryFollow.isFollowing(data);
                 if(result) return res.send();
@@ -21,15 +21,20 @@ class UserController {
             }
             return res.status(418).send();
         } catch(error) {
-            res.status(500).send(error);
+            return res.status(500).sendfile(error);
         }
     }
 
     async unfollow(req,res) {
         try {
-            const data = JSON.parse(req.params.data);
-            const user1 = queryUser.getUserById({userId:data.userOne});
-            const user2 = queryUser.getUserById({userId:data.userTwo});
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
+
+            const data = req.body;
+            const user1 = await queryUser.getUserById({userId:data.userOne});
+            const user2 = await queryUser.getUserById({userId:data.userTwo});
             if(user1._isactive && user2._isactive) {
                 const result = await queryFollow.isFollowing(data);
                 if(result) await queryFollow.stopFollowing(data);
@@ -37,24 +42,33 @@ class UserController {
             }
             return res.status(418).send();
         } catch (error) {
-            res.status(500).send(error);
+            return res.status(500).send(error);
         }
     }
 
     async editProfile(req,res) {
         try {
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
 
+            return res.send();
         } catch(error) {
-            res.status(500).send();
+            return res.status(500).send();
         }
     }
 
     async changePassword(req,res) {
         try {
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
 
-
+            return res.send();
         } catch(error) {
-            res.status(500).send();
+            return res.status(500).send();
         }
     }
 

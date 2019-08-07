@@ -24,7 +24,7 @@ const getUserById = ({userId}) => {
                 connection.query(`select * from user where user_id = '${userId}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
                     else if(row.length==0) return resolve(false);
-                    resolve(row[0]);
+                    return resolve(row[0]);
                 });
             }
         });
