@@ -1,3 +1,4 @@
+
 const queryFollow = require('../biz/queryFollow');
 const queryUser = require('../biz/queryUser');
 class UserController {
@@ -87,6 +88,12 @@ class UserController {
             return res.status(500).send();
         }
     }
+
+    async editPP(req,res) {
+        res.send();
+    }
+
+
 
 }
 
