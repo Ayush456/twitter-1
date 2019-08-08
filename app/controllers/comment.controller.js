@@ -1,6 +1,5 @@
 const queryComment = require('../biz/queryComment');
 const queryTweet = require('../biz/queryTweet');
-const { validationResult } = require('express-validator');
 class CommentController {
     
     // checked
@@ -25,7 +24,7 @@ class CommentController {
         try {
             // if token is not expire or exist.
 
-            dataOperation.validateRequest(req,validationResult);
+            dataOperation.validateRequest(req);
             
 
             const data = req.body;
@@ -46,7 +45,7 @@ class CommentController {
         dataOperation.addToResponse(res);    
         try {
         // if token is not expire or exist.
-        dataOperation.validateRequest(req,validationResult);
+        dataOperation.validateRequest(req);
 
         const data = req.body;
         const tweet = await queryTweet.getTweetById(data);
@@ -65,7 +64,7 @@ class CommentController {
         dataOperation.addToResponse(res);
         try {
             // if token is not expire or exist.
-            dataOperation.validateRequest(req,validationResult);
+            dataOperation.validateRequest(req);
 
             const data = req.body;
             const tweet = await queryTweet.getTweetById(data);

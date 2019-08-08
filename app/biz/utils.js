@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator');
 
 //checked and using
 const userToProfile = ({user_id,user_name,user_dob,user_pp,user_follow_count,user_follower_count,user_tweet_count,user_status,user_cp}) => {
@@ -24,13 +25,11 @@ const removeHashTags = (data) => {
     data.hashTags.shift();
 } 
 
-const validateRequest =(req,res,validationResult) => {
+const validateRequest =(req) => {
     const errors = validationResult(req);
     if(!errors.isEmpty()) {
         return res.status(422).json({errors : errors.array() });
     }
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 }
 
 const addToResponse = (res) => {
