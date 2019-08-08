@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon ./app/server.js -e js,hbs"
+    "start": "nodemon ./app/server.js -e js,hbs",
+    "dev":"nodemon ./app/server.js -e js hbs"
   },
   "keywords": [],
   "author": "",

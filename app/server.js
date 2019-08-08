@@ -3,6 +3,8 @@ const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
 const app = express();
+const bodyParser = require('body-parser')
+
 
 //default paths
 const publicDirectoryPath = path.join(__dirname, 'public');
@@ -18,6 +20,7 @@ hbs.registerPartials(layoutsPath);
 // for body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 
 //routes included
 const indexRoute = require('./routers/indexRouter');

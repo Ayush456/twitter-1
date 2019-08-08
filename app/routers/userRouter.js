@@ -12,9 +12,6 @@ router.put('/edit_profile',userValidator.validate('editProfile'),user.editProfil
 
 router.put('/delete',userValidator.validate('deleteAccount'),user.deleteAccount);    //{userId}
 
-// router.put('/edit_pp/:data',user.editPP);                //{userId,userPP,...} --
-
-// router.put('/edit_cp/:data',user.editCP);                //{userId....} --
 
 router.put('/change_password',userValidator.validate('changePassword'),user.changePassword); // {userId,oldPassword,newPassword};
 
