@@ -52,6 +52,14 @@ const validate = (method) => {
                 .isByteLength({min:8,max:15}).withMessage('password should have 8 to 15 characters')
             ]
         }
+
+        case 'deleteAccount' : {
+            return [
+                body('userId')
+                .exists().withMessage('userId doesn\'t exist')
+                .isString().withMessage('userId must be string')
+            ]
+        }
     }
 }
 

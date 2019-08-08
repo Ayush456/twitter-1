@@ -5,19 +5,16 @@ const queryRetweet = require('../biz/queryRetweet');
 const queryComment = require('../biz/queryComment');
 const queryHashtag = require('../biz/queryHashtag');
 const { validationResult } = require('express-validator');
-const dataOperation = require('../biz/dataOperation');
+const dataOperation = require('../biz/utils');
 
 class TweetController {
     
     // checked
     async saveTweet(req,res) {
+        dataOperation.addToResponse(res);
         try {
-            // validate token and check for user
-            const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
-
+            
+            dataOperation.validateRequest(req,validationResult);
             const data = req.body;
             const user = await queryUser.getUserById(data);
             if(user) {
@@ -35,12 +32,11 @@ class TweetController {
 
     // checked
     async editTweet(req,res) {
+        dataOperation.addToResponse(res);
         try {
             // validate token and check for user
-            const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+
+            dataOperation.validateRequest(req,validationResult);
 
             const data = req.body;
 
@@ -61,12 +57,11 @@ class TweetController {
 
 
     async deleteTweet(req,res) {
+        dataOperation.addToResponse(res);
         try {
             // validate token and check for user
-            const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+
+            dataOperation.validateRequest(req,validationResult);
 
             const data = req.body;
             const result = await queryTweet.getTweet(data);
@@ -91,11 +86,10 @@ class TweetController {
 
     // checked
     async like(req,res) {
+        dataOperation.addToResponse(res);
         try {
-            const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+
+            dataOperation.validateRequest(req,validationResult);
 
             let  data = req.body;
             const tweet = await queryTweet.getTweetById(data);
@@ -124,11 +118,10 @@ class TweetController {
     // checked
     async retweet(req,res){
         // validate token and check for user
+        dataOperation.addToResponse(res);
         try {
-            const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+
+            dataOperation.validateRequest(req,validationResult);
 
            let data = req.body;
            const user = await queryUser.getUserById(data);

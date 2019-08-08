@@ -25,6 +25,7 @@ const commentRoute = require('./routers/commentRouter');
 const tweetRoute = require('./routers/tweetRouter');
 const dataRoute = require('./routers/dataRouter');
 const userRoute = require('./routers/userRouter');
+const searchRoute = require('./routers/searchRouter');
 
 //required by express
 app.use(express.static(publicDirectoryPath));
@@ -37,6 +38,7 @@ app.use('/comment',commentRoute);     //search edit feed trend who_to_follow act
 app.use('/tweet',tweetRoute);
 app.use('/data',dataRoute);
 app.use('/user',userRoute);
+app.use('/search',searchRoute);
 
 //port created
 const PORT = process.env.PORT || 5000;

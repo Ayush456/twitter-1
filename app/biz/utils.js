@@ -24,11 +24,27 @@ const removeHashTags = (data) => {
     data.hashTags.shift();
 } 
 
+const validateRequest =(req,res,validationResult) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()) {
+        return res.status(422).json({errors : errors.array() });
+    }
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+}
+
+const addToResponse = (res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+}
+
 
 
 
 
 module.exports = {
     userToProfile : userToProfile,
-    hashTags : removeHashTags
+    validateRequest : validateRequest,
+    hashTags : removeHashTags,
+    addToResponse : addToResponse
 }
