@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator');
 class UserController {
 
     async follow(req,res) {
+        dataOperation.addToResponse(res);
         try {
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
@@ -26,11 +27,9 @@ class UserController {
     }
 
     async unfollow(req,res) {
+        dataOperation.addToResponse(res);
         try {
-            const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+            dataOperation.validateRequest(req,validationResult);
 
             const data = req.body;
             const user1 = await queryUser.getUserById({userId:data.userOne});
@@ -47,11 +46,9 @@ class UserController {
     }
 
     async editProfile(req,res) {
+        dataOperation.addToResponse(res);
         try {
-            const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+            dataOperation.validateRequest(req,validationResult);
             const data = req.body;
             const user = await queryUser.getUserById(data);
             if(user && user._isactive) {
@@ -65,11 +62,9 @@ class UserController {
     }
 
     async deleteAccount(req,res) {
+        dataOperation.addToResponse(res);
         try {
-            const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+            dataOperation.validateRequest(req,validationResult);
 
             const data = req.body;
             const user = await queryUser.getUserById(data);
@@ -85,11 +80,9 @@ class UserController {
     }
 
     async changePassword(req,res) {
+        dataOperation.addToResponse(res);
         try {
-            const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+            dataOperation.validateRequest(req,validationResult);
 
             
 

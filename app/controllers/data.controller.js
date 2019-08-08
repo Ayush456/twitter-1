@@ -1,6 +1,6 @@
 const queryFollow = require('../biz/queryFollow');
 const queryUser = require('../biz/queryUser');
-const dataOperation = require('../biz/dataOperation');
+const dataOperation = require('../biz/utils');
 const queryTweet = require('../biz/queryTweet');
 const queryComment = require('../biz/queryComment');
 const queryLike = require('../biz/queryLike');
@@ -8,6 +8,7 @@ class DataController {
 
     //checked
     async isFollowing(req,res) {
+        dataOperation.addToResponse(res);
         try{
             const userOne = await queryUser.getUserById({userId:req.params.userOne});
             const userTwo = await queryUser.getUserById({userId:req.params.userTwo});
@@ -24,6 +25,7 @@ class DataController {
 
     //checked
     async isFollowed(req,res) {
+        dataOperation.addToResponse(res);
         try{
             const userOne = await queryUser.getUserById({userId:req.params.userOne});
             const userTwo = await queryUser.getUserById({userId:req.params.userTwo});
@@ -40,6 +42,7 @@ class DataController {
 
     //checked
     async getProfile(req,res) {
+        dataOperation.addToResponse(res);
         try {
             const data = {userId : req.params.userId};
             const user = await queryUser.getUserById(data);
@@ -55,6 +58,7 @@ class DataController {
 
     //checked
     async getFollowers(req,res) {
+        dataOperation.addToResponse(res);
         try {
             const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
@@ -70,6 +74,7 @@ class DataController {
 
     // Checked
     async getFollowings(req,res) {
+        dataOperation.addToResponse(res);
         try {
             const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
@@ -85,6 +90,7 @@ class DataController {
 
     // checked
     async getTweets(req,res) {
+        dataOperation.addToResponse(res);
         try {
             const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
@@ -101,6 +107,7 @@ class DataController {
 
     // checked
     async getLikes(req,res) {
+        dataOperation.addToResponse(res);
         try {
             const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
@@ -116,6 +123,7 @@ class DataController {
     }
 
     async getFeeds(req,res) {
+        dataOperation.addToResponse(res);
         try {
             const data = { userId : req.params.userId, lastTweetCount : req.params.lastTweetCount };
             
@@ -132,6 +140,7 @@ class DataController {
     }   
      
     async getFeed(req,res) {
+        dataOperation.addToResponse(res);
         try {
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
