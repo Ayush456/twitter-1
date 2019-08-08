@@ -2,6 +2,7 @@ const queryFollow = require('../biz/queryFollow');
 const queryUser = require('../biz/queryUser');
 const dataOperation = require('../biz/utils');
 const queryTweet = require('../biz/queryTweet');
+const queryHashTags = require('../biz/queryHashtag');
 const queryComment = require('../biz/queryComment');
 const queryLike = require('../biz/queryLike');
 class DataController {
@@ -149,6 +150,49 @@ class DataController {
 
         } catch(error) {
 
+        }
+    }
+
+    // checked
+    async getUserPP(req,res) {
+        dataOperation.addToResponse(res);
+        try {
+            const data = {userId : req.params.userId};
+            const user = await queryUser.getUserById(data);
+            if(user && user.user_pp) {
+                res.set('Content-Type','image/jpeg');
+                return res.download(user.user_pp);
+            }
+            return res.status(418).send();
+        } catch(error) {
+            return res.status(500).send(error);
+        }
+    }
+
+    // checked
+    async getUserCP(req,res) {
+        dataOperation.addToResponse(res);
+        try {
+            const data = {userId : req.params.userId};
+            const user = await queryUser.getUserById(data);
+            if(user && user.user_cp) {
+                res.set('Content-Type','image/jpeg');
+                return res.download(user.user_cp);
+            }
+            return res.status(418).send();
+        } catch(error) {
+            return res.status(500).send(error);
+        }
+    }
+
+    async getTrends(req,res) {
+        dataOperation.addToResponse(res);
+        try {
+            const data = {"offset" : req.params.offset};
+            const trends = await queryHashTags.getTrends(data);
+            return res.send(trends);
+        } catch (error) {
+            return res.status(500).sendfile(error);
         }
     }
 

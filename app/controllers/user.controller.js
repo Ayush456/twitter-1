@@ -1,6 +1,6 @@
-
 const queryFollow = require('../biz/queryFollow');
 const queryUser = require('../biz/queryUser');
+const utils = require('../biz/utils');
 class UserController {
 
     async follow(req,res) {
@@ -90,39 +90,36 @@ class UserController {
     }
 
     async editPP(req,res) {
+        utils.addToResponse(res);
         try {
             const data = {"userId" : req.body.userId,"picturePath" : req.files.upload[0].path};
             const user = await queryUser.getUserById(data);
             if(user) {
                 await queryUser.updateUserPP(data);
+                if(user.user_pp != null) utils.deleteFile(user.user_pp);
                 return res.send();
             }
-            return res.status(418).send();
-            
-            
+            return res.status(418).send();   
         } catch(error) {
             return res.status(500).send(error);
         }
     }
 
     async editCP(req,res) {
+        utils.addToResponse(res);
         try {
             const data = {"userId" : req.body.userId,"picturePath" : req.files.upload[0].path};
             const user = await queryUser.getUserById(data);
             if(user) {
                 await queryUser.updateUserCP(data);
+                if (user.user_cp != null)utils.deleteFile(user.user_cp);
                 return res.send();
             }
-            return res.status(418).send();
-            
-            
+            return res.status(418).send();    
         } catch(error) {
             return res.status(500).send(error);
         }
     }
-
-
-
 }
 
 module.exports = UserController;

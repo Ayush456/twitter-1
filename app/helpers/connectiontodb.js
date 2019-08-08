@@ -5,7 +5,7 @@ const mysqlDB = mysql.createPool({
     port: '3306',
     password: '1234',
     database: 'twitter',
-    queueLimit: 0,       // unlimited queueing
+    queueLimit: 1000,       // unlimited queueing
     connectionLimit: 0   // unlimited connections 
 });
 

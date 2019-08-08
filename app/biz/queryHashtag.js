@@ -53,9 +53,25 @@ const getTweetByHashtag = ({key,offset}) => {
     });
 }
 
+const getTrends = ({offset}) => {
+    return new Promise ((resolve,reject) => {
+        mysqldb.getConnection((error,connection) => {
+            if(error) reject('error while connecting to db\n'+error);
+            else {
+                const query = `select hash_tag hashtag,count(*) count from user_tweets_hashtag group by hashtag order by count desc limit ${offset},20 `;
+                connection.query(query,(error,result) => {
+                    if(error) reject('error while executing query\n'+error);
+                    return resolve(result);
+                });
+            }
+        });
+    }); 
+}
+
 
 module.exports = {
     insertHashTags : insertHashTags,
     deleteHashTags : deleteHashTags,
-    getTweetByHashtag : getTweetByHashtag
+    getTweetByHashtag : getTweetByHashtag,
+    getTrends : getTrends
 }

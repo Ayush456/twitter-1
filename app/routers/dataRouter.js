@@ -21,6 +21,12 @@ router.get('/feeds/:userId/:lastTweetCount',data.getFeeds);                //{us
 
 router.get('/feed/:tweetId',data.getFeed);                   //{tweetId}
 
+router.get('/profile_picture/:userId',data.getUserPP);  //{userId}
+
+router.get('/cover_picture/:userId',data.getUserCP);  //{userId}
+
+router.get('/trends/:offset',data.getTrends);
+
 router.get('*', (req, res) => res.status(404).send());
 
 module.exports = router;
