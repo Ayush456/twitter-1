@@ -67,7 +67,7 @@ const getTweetsLikedBy = ({userId}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) return reject('error while conncting db\n'+error);
             else {
-                const query = `select * from user_tweets as ut join user_tweets_likes as utc on ut.tweet_id = utc.tweet_id where utc.user_id_by = '${userId}'`;
+                const query = `select * from user_tweets as ut join user_tweets_likes as utc on ut.tweet_id = utc.tweet_id where utc.user_id_by order by ut.atTime desc = '${userId}'`;
                 connection.query(query,(error,row) => {
                     if(error) return reject('error while executing query\n'+error);
                     if(row.length==0) return resolve(false);
@@ -100,7 +100,7 @@ const getTweetByUserId = ({userId}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) return reject('error while connecting db\n'+ error);
             else {
-                connection.query(`select * from user_tweets where user_id = '${userId}'`,(error,row) => {
+                connection.query(`select * from user_tweets where user_id = '${userId}' order by atTime desc`,(error,row) => {
                     if(error) return reject('error while executing query\n'+error);
                     if(row.length == 0) return resolve(false);
                     resolve(row);

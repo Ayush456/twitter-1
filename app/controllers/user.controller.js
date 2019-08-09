@@ -4,9 +4,9 @@ const utils = require('../biz/utils');
 class UserController {
 
     async follow(req,res) {
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
-            dataOperation.validateRequest(req);
+            utils.validateRequest(req);
 
             const data = req.body;
             const user1 = await queryUser.getUserById({userId:data.userOne});
@@ -24,9 +24,9 @@ class UserController {
     }
 
     async unfollow(req,res) {
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
-            dataOperation.validateRequest(req);
+            utils.validateRequest(req);
 
             const data = req.body;
             const user1 = await queryUser.getUserById({userId:data.userOne});
@@ -43,9 +43,9 @@ class UserController {
     }
 
     async editProfile(req,res) {
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
-            dataOperation.validateRequest(req);
+            utils.validateRequest(req);
             const data = req.body;
             const user = await queryUser.getUserById(data);
             if(user && user._isactive) {
@@ -59,9 +59,9 @@ class UserController {
     }
 
     async deleteAccount(req,res) {
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
-            dataOperation.validateRequest(req);
+            utils.validateRequest(req);
 
             const data = req.body;
             const user = await queryUser.getUserById(data);
@@ -77,13 +77,23 @@ class UserController {
     }
 
     async changePassword(req,res) {
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
-            dataOperation.validateRequest(req);
-
-            
-
-            return res.send();
+            utils.validateRequest(req);
+            const data = req.body;
+            const user = await queryUser.getUserById(data);
+            if(user) {
+                const oldPasswordHash = utils.generatePasswordHash(data.oldPassword);
+                const passwordHash = await queryUser.getPasswordHash(data);
+                if(oldPasswordHash == passwordHash) {
+                    const newPasswordHash = utils.generatePasswordHash(data.newPassword);
+                    data.passwordHash = newPasswordHash;
+                    await queryUser.updatePasswordHash(data);
+                    res.send('password changed');
+                }
+                return res.status(200).send('please use correct old password');
+            }
+            return res.status(418).send();
         } catch(error) {
             return res.status(500).send();
         }

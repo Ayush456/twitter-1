@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const fs = require('fs');
+const sha1 = require('sha1');
 
 
 //checked and using
@@ -46,6 +47,8 @@ const deleteFile = (picturePath) => {
     return;
 }
 
+const generatePasswordHash = (password) => {return sha1(password)};
+
 
 
 
@@ -55,5 +58,6 @@ module.exports = {
     validateRequest : validateRequest,
     deleteFile : deleteFile,
     hashTags : removeHashTags,
-    addToResponse : addToResponse
+    addToResponse : addToResponse,
+    generatePasswordHash : generatePasswordHash
 }

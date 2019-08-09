@@ -31,6 +31,22 @@ const getUserById = ({userId}) => {
     });
 }
 
+const getPasswordHash = ({userId}) => {
+    return new Promise((resolve,reject) => {
+        mysqldb.getConnection((error,connection) => {
+            if(error) reject('error while conecting db\n'+error);
+            else {
+                connection.query(`select user_password_hash passwordHash from user where userId = '${userId}'`,(error,row) => {
+                    if(error) reject('error while executing query\n'+error);
+                    else if(row.length==0) return resolve(false);
+                    return resolve(row[0]);
+                });
+            }
+        });
+    });
+
+}
+
 const getUserByName = ({key,offset}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
@@ -88,6 +104,20 @@ const updateUserProfile = ({userId,userStatus,userDob}) => {
     });
 }
 
+const updatePasswordHash = ({userId,passwordHash}) => {
+    return new Promise((resolve,reject) => {
+        mysqldb.getConnection((error,connection) => {
+            if(error) reject('error while conecting db\n'+error);
+            else {
+                connection.query(`update user set user_password_hash = '${passwordHash}' where user_id = '${userId}'`,(error) => {
+                    if(error) reject('error while executing query\n'+error);
+                    resolve();
+                });
+            }
+        });
+    }); 
+}
+
 const increaseCount = (column,{userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
@@ -136,10 +166,12 @@ module.exports = {
     getUserByName : getUserByName,
     updateUserPP : updateUserPP,
     updateUserCP : updateUserCP,
+    updatePasswordHash : updatePasswordHash,
     updateUserProfile : updateUserProfile,
     increaseCount : increaseCount,
     decreaseCount : decreaseCount,
-    deleteUser : deleteUser
+    deleteUser : deleteUser,
+    getPasswordHash : getPasswordHash
 }
 
 
