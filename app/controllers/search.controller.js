@@ -23,7 +23,6 @@ class Search {
         } catch(error) {
             return res.status(500).sendfile(error);
         }
-
     }
 }
 

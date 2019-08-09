@@ -1,3 +1,4 @@
+
 const queryFollow = require('../biz/queryFollow');
 const queryUser = require('../biz/queryUser');
 class UserController {
@@ -87,6 +88,40 @@ class UserController {
             return res.status(500).send();
         }
     }
+
+    async editPP(req,res) {
+        try {
+            const data = {"userId" : req.body.userId,"picturePath" : req.files.upload[0].path};
+            const user = await queryUser.getUserById(data);
+            if(user) {
+                await queryUser.updateUserPP(data);
+                return res.send();
+            }
+            return res.status(418).send();
+            
+            
+        } catch(error) {
+            return res.status(500).send(error);
+        }
+    }
+
+    async editCP(req,res) {
+        try {
+            const data = {"userId" : req.body.userId,"picturePath" : req.files.upload[0].path};
+            const user = await queryUser.getUserById(data);
+            if(user) {
+                await queryUser.updateUserCP(data);
+                return res.send();
+            }
+            return res.status(418).send();
+            
+            
+        } catch(error) {
+            return res.status(500).send(error);
+        }
+    }
+
+
 
 }
 

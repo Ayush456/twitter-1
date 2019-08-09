@@ -4,6 +4,6 @@ const Search = require('../controllers/search.controller');
 const search = new Search();
 const searchValidator = require('../validators/search.validator');
 
-router.get('/',searchValidator.validate('getList'),search.getList);
+router.post('/',searchValidator.validate('getList'),search.getList);
 
 module.exports = router;
