@@ -1,13 +1,13 @@
 const queryUser = require('../biz/queryUser');
 const queryHashtag = require('../biz/queryHashtag');
-const dataOperation = require('../biz/utils');
+const utils = require('../biz/utils');
 
 class Search {
 
     async getList(req,res) {
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
-            dataOperation.validateRequest(req);
+            utils.validateRequest(req);
 
             const data = req.body;
             if(data.key.charAt(0) == "#") {

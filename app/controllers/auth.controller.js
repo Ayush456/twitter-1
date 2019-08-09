@@ -1,55 +1,42 @@
-const sha1 = require('sha1');
-const mysqlDB = require('../helpers/connectiontodb');
-const path = require('path');
-const shortid = require('shortid');
+const queryUser = require('../biz/queryUser');
 const utils = require('./../biz/utils');
 
 class AuthController {
-    run(req,res){
-       res.send('ayush: '+sha1('ayush')+" &nbsp; &nbsp; ayush$: "+sha1('ayush$'));          
-    }
 
-    login(req,res){
-        res.render('login',{data:null});
-    }
+    login(req,res) { res.render('login',{data:null}); }
     
-    checkLoginReg(req,res){
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-      let email = req.body.user_email;
-      let pass = req.body.user_password;
-      console.log(req.body);
-      
-      mysqlDB.query('select * from user where user_email=? and user_password=?',[email,pass],function(err,result){
-        if(err){
-            throw err;
-        } 
-        else{
-            console.log(result[0]);
-            res.status(200).send(result[0]);
+    async checkLoginReg(req,res) {
+        utils.addToResponse(res); 
+        try {
+            const data = req.body;
+            const passwordHash = utils.generatePasswordHash(data.user_password);
+            data.passwordHash = passwordHash;
+            const user = await queryUser.login(data);
+            if(user) return res.send(user);
+            return res.send('Invalid login detalis')
+        } catch(error) {
+            return res.status(500).sendfile(error);
         }
-      });
-      
-    };
+    }
 
-    signupReq(req,res){
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        const user = req.body;
-        const  user_id = utils.generateUserId(user.username);
-        console.log(user_id);
-
-
-        mysqlDB.query(`insert into user (user_id,user_name,user_password,user_password_hash,user_dob,user_email,_isactive) values (?,?,?,?,?,?,?)`,[user_id,user.username,user.user_password,sha1(''+user.user_password),user.dob,user.user_email,1], function(err,result){
-            if(err){
-                throw err;
-               
-            }else{
-                console.log('user inserted into database');
-                res.status(200).send({ insertStatus: '1', user:user, user_id: user_id });
+    async signupReq(req,res) {
+        utils.addToResponse(res);
+        try {
+            const data = req.body;
+            const isSigned = await queryUser.getUserByEmail(data);
+            if(!isSigned) {
+                const passwordHash = utils.generatePasswordHash(data.user_password);
+                const userId = utils.generateUserId(data.username);
+                data.userId = userId;
+                data.passwordHash = passwordHash;
+                await queryUser.signup(data);
+                delete data.passwordHash,data.user_password;
+                return res.send({ insertStatus: '1', user:data, user_id: userId });
             }
-        });
-
+            return res.send('Email already exist');
+        } catch(error) {
+            return res.status(500).sendfile(error);
+        }
     }
 
 }

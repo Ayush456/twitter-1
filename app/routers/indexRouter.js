@@ -11,7 +11,7 @@ router.get('/',authController.login);
 
 router.post('/login',authController.checkLoginReg);
 
-router.get('/signup',(req,res)=>{
+router.get('/signup',(req,res) => {
     res.render('signUp');
 });
 // /user

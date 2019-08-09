@@ -31,6 +31,21 @@ const getUserById = ({userId}) => {
     });
 }
 
+const getUserByEmail = ({user_email}) => {
+    return new Promise((resolve,reject) => {
+        mysqldb.getConnection((error,connection) => {
+            if(error) reject('error while conecting db\n'+error);
+            else {
+                connection.query(`select 1 from user where user_email = '${user_email}'`,(error,row) => {
+                    if(error) reject('error while executing query\n'+error);
+                    else if(row.length==0) return resolve(false);
+                    return resolve(row[0]);
+                });
+            }
+        });
+    });
+}
+
 const getPasswordHash = ({userId}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
@@ -55,6 +70,37 @@ const getUserByName = ({key,offset}) => {
                 connection.query(`select user_id userId,user_name userName,user_status userStatus,user_pp userPPPath from user where user_name = '${key}' order by userName limit ${offset},10`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
                     return resolve(row);
+                });
+            }
+        });
+    });
+}
+
+const login = ({user_email,passwordHash}) => {
+    return new Promise((resolve,reject) => {
+        mysqldb.getConnection((error,connection) => {
+            if(error) reject('error while conecting db\n'+error);
+            else {
+                const query = `select user_name,user_id,user_email from user where user_email='${user_email}' and user_password_hash='${passwordHash}'`
+                connection.query(query,(error,row) => {
+                    if(error) reject('error while executing query\n'+error);
+                    if(row.length == 0) return resolve(false);
+                    return resolve(row[0]);
+                });
+            }
+        });
+    }); 
+}
+
+const signup = ({username,user_password,dob,user_email,userId,passwordHash}) => {
+    return new Promise((resolve,reject) => {
+        mysqldb.getConnection((error,connection) => {
+            if(error) reject('error while conecting db\n'+error);
+            else {
+                const query = `insert into user (user_id,user_name,user_password,user_password_hash,user_dob,user_email,_isactive) values ('${userId}','${username}','${user_password}','${passwordHash}','${dob}','${user_email}','1')`;
+                connection.query(query,(error) => {
+                    if(error) reject('error while executing query\n'+error);
+                    return resolve();
                 });
             }
         });
@@ -159,11 +205,14 @@ const deleteUser = ({userId}) => {
         });
     });
 }
+
+
  
 module.exports = {
     createUser : createUser,
     getUserById : getUserById,
     getUserByName : getUserByName,
+    getUserByEmail : getUserByEmail,
     updateUserPP : updateUserPP,
     updateUserCP : updateUserCP,
     updatePasswordHash : updatePasswordHash,
@@ -171,7 +220,9 @@ module.exports = {
     increaseCount : increaseCount,
     decreaseCount : decreaseCount,
     deleteUser : deleteUser,
-    getPasswordHash : getPasswordHash
+    getPasswordHash : getPasswordHash,
+    login : login,
+    signup : signup
 }
 
 

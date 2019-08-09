@@ -100,11 +100,7 @@ const getTweetByUserId = ({userId}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) return reject('error while connecting db\n'+ error);
             else {
-<<<<<<< HEAD
-                connection.query(`select * from user_tweets where user_id = '${userId}' order by atTime desc`,(error,row) => {
-=======
                 connection.query(`select * from user_tweets where user_id = '${userId}' order by atTime DESC`,(error,row) => {
->>>>>>> a7c76ca55f84f73f97963fefdd258cda048425af
                     if(error) return reject('error while executing query\n'+error);
                     if(row.length == 0) return resolve(false);
                     resolve(row);

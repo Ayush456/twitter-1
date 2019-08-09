@@ -4,20 +4,20 @@ const queryLike = require('../biz/queryLike');
 const queryRetweet = require('../biz/queryRetweet');
 const queryComment = require('../biz/queryComment');
 const queryHashtag = require('../biz/queryHashtag');
-const dataOperation = require('../biz/utils');
+const utils = require('../biz/utils');
 
 class TweetController {
     
     // checked
     async saveTweet(req,res) {
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
             
-            dataOperation.validateRequest(req);
+            utils.validateRequest(req);
             const data = req.body;
             const user = await queryUser.getUserById(data);
             if(user) {
-                dataOperation.hashTags(data);
+                utils.hashTags(data);
                 const tweet = await queryTweet.saveTweet(data);
                 await queryHashtag.insertHashTags({tweetId : tweet.insertId,hashTags : data.hashTags});
                 await queryUser.increaseCount('user_tweet_count',{userId:data.userId})
@@ -31,17 +31,17 @@ class TweetController {
 
     // checked
     async editTweet(req,res) {
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
             // validate token and check for user
 
-            dataOperation.validateRequest(req);
+            utils.validateRequest(req);
 
             const data = req.body;
 
             const tweet = await queryTweet.getTweetById(data);
             if(tweet) {
-                dataOperation.hashTags(data);
+                utils.hashTags(data);
                 await queryHashtag.deleteHashTags(data);
                 await queryLike.deleteLikebyTweetId(data);
                 await queryTweet.updateTweet(data);
@@ -56,11 +56,11 @@ class TweetController {
 
 
     async deleteTweet(req,res) {
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
             // validate token and check for user
 
-            dataOperation.validateRequest(req);
+            utils.validateRequest(req);
 
             const data = req.body;
             const result = await queryTweet.getTweet(data);
@@ -85,10 +85,10 @@ class TweetController {
 
     // checked
     async like(req,res) {
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
 
-            dataOperation.validateRequest(req);
+            utils.validateRequest(req);
 
             let  data = req.body;
             const tweet = await queryTweet.getTweetById(data);
@@ -117,16 +117,16 @@ class TweetController {
     // checked
     async retweet(req,res){
         // validate token and check for user
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
 
-            dataOperation.validateRequest(req);
+            utils.validateRequest(req);
 
            let data = req.body;
            const user = await queryUser.getUserById(data);
            const tweet = await queryTweet.getTweetById(data);
            if(user && tweet) {
-                dataOperation.hashTags(data);
+                utils.hashTags(data);
                 const result = await queryTweet.saveTweet(data);
                 const from = data.tweetId;
                 data.tweetId = result.insertId;
