@@ -4,7 +4,6 @@ const queryLike = require('../biz/queryLike');
 const queryRetweet = require('../biz/queryRetweet');
 const queryComment = require('../biz/queryComment');
 const queryHashtag = require('../biz/queryHashtag');
-const { validationResult } = require('express-validator');
 const dataOperation = require('../biz/utils');
 
 class TweetController {
@@ -14,7 +13,7 @@ class TweetController {
         dataOperation.addToResponse(res);
         try {
             
-            dataOperation.validateRequest(req,validationResult);
+            dataOperation.validateRequest(req);
             const data = req.body;
             const user = await queryUser.getUserById(data);
             if(user) {
@@ -36,7 +35,7 @@ class TweetController {
         try {
             // validate token and check for user
 
-            dataOperation.validateRequest(req,validationResult);
+            dataOperation.validateRequest(req);
 
             const data = req.body;
 
@@ -61,7 +60,7 @@ class TweetController {
         try {
             // validate token and check for user
 
-            dataOperation.validateRequest(req,validationResult);
+            dataOperation.validateRequest(req);
 
             const data = req.body;
             const result = await queryTweet.getTweet(data);
@@ -89,7 +88,7 @@ class TweetController {
         dataOperation.addToResponse(res);
         try {
 
-            dataOperation.validateRequest(req,validationResult);
+            dataOperation.validateRequest(req);
 
             let  data = req.body;
             const tweet = await queryTweet.getTweetById(data);
@@ -121,7 +120,7 @@ class TweetController {
         dataOperation.addToResponse(res);
         try {
 
-            dataOperation.validateRequest(req,validationResult);
+            dataOperation.validateRequest(req);
 
            let data = req.body;
            const user = await queryUser.getUserById(data);

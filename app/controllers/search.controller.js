@@ -1,6 +1,5 @@
 const queryUser = require('../biz/queryUser');
 const queryHashtag = require('../biz/queryHashtag');
-const { validationResult } = require('express-validator');
 const dataOperation = require('../biz/utils');
 
 class Search {
@@ -8,7 +7,7 @@ class Search {
     async getList(req,res) {
         dataOperation.addToResponse(res);
         try {
-            dataOperation.validateRequest(req,validationResult);
+            dataOperation.validateRequest(req);
 
             const data = req.body;
             if(data.key.charAt(0) == "#") {

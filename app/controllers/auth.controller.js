@@ -2,6 +2,8 @@ const sha1 = require('sha1');
 const mysqlDB = require('../helpers/connectiontodb');
 const path = require('path');
 const shortid = require('shortid');
+const utils = require('./../biz/utils');
+
 class AuthController {
     run(req,res){
        res.send('ayush: '+sha1('ayush')+" &nbsp; &nbsp; ayush$: "+sha1('ayush$'));          
@@ -34,7 +36,7 @@ class AuthController {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         const user = req.body;
-        const  user_id = user.username + shortid.generate();
+        const  user_id = utils.generateUserId(user.username);
         console.log(user_id);
 
 
