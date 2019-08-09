@@ -3,6 +3,8 @@ const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
 const app = express();
+const bodyParser = require('body-parser')
+
 
 //default paths
 const publicDirectoryPath = path.join(__dirname, 'public');
@@ -18,6 +20,7 @@ hbs.registerPartials(layoutsPath);
 // for body parsing
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 
 //routes included
 const indexRoute = require('./routers/indexRouter');
@@ -32,6 +35,11 @@ app.use(express.static(publicDirectoryPath));
 app.use(express.static(viewsPath));
 app.use(express.static(authPath));
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 //base routesc
 app.use('/',indexRoute);       //for login-signin-auth  
 app.use('/comment',commentRoute);     //search edit feed trend who_to_follow activity
