@@ -5,10 +5,12 @@ const utils = require('../biz/utils');
 class Search {
 
     async getList(req,res) {
-        utils.addToResponse(res);
         try {
-            utils.validateRequest(req);
-
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
             const data = req.body;
             if(data.key.charAt(0) == "#") {
                 data.key = data.key.slice(1,data.key.length);

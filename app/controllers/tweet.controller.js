@@ -10,10 +10,12 @@ class TweetController {
     
     // checked
     async saveTweet(req,res) {
-        utils.addToResponse(res);
         try {
-            
-            utils.validateRequest(req);
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
             const data = req.body;
             const user = await queryUser.getUserById(data);
             if(user) {
@@ -31,11 +33,13 @@ class TweetController {
 
     // checked
     async editTweet(req,res) {
-        utils.addToResponse(res);
         try {
             // validate token and check for user
-
-            utils.validateRequest(req);
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
 
             const data = req.body;
 
@@ -56,11 +60,13 @@ class TweetController {
 
 
     async deleteTweet(req,res) {
-        utils.addToResponse(res);
         try {
             // validate token and check for user
-
-            utils.validateRequest(req);
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
 
             const data = req.body;
             const result = await queryTweet.getTweet(data);
@@ -85,10 +91,12 @@ class TweetController {
 
     // checked
     async like(req,res) {
-        utils.addToResponse(res);
         try {
-
-            utils.validateRequest(req);
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
 
             let  data = req.body;
             const tweet = await queryTweet.getTweetById(data);
@@ -117,10 +125,12 @@ class TweetController {
     // checked
     async retweet(req,res){
         // validate token and check for user
-        utils.addToResponse(res);
         try {
-
-            utils.validateRequest(req);
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
 
            let data = req.body;
            const user = await queryUser.getUserById(data);

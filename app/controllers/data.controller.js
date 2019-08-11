@@ -9,8 +9,8 @@ class DataController {
 
     //checked
     async isFollowing(req,res) {
-        utils.addToResponse(res);
         try{
+            res = await utils.addToResponse(res); 
             const userOne = await queryUser.getUserById({userId:req.params.userOne});
             const userTwo = await queryUser.getUserById({userId:req.params.userTwo});
             if(userOne && userTwo) {
@@ -26,8 +26,8 @@ class DataController {
 
     //checked
     async isFollowed(req,res) {
-        utils.addToResponse(res);
         try{
+            res = await utils.addToResponse(res); 
             const userOne = await queryUser.getUserById({userId:req.params.userOne});
             const userTwo = await queryUser.getUserById({userId:req.params.userTwo});
             if(userOne && userTwo) {
@@ -43,8 +43,8 @@ class DataController {
 
     //checked
     async getProfile(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const data = {userId : req.params.userId};
             const user = await queryUser.getUserById(data);
             if(user) {
@@ -59,8 +59,8 @@ class DataController {
 
     //checked
     async getFollowers(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
             if(user) {
@@ -75,8 +75,8 @@ class DataController {
 
     // Checked
     async getFollowings(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
             if(user) {
@@ -91,8 +91,8 @@ class DataController {
 
     // checked
     async getTweets(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
             if(user) {
@@ -108,8 +108,8 @@ class DataController {
 
     // checked
     async getLikes(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const data = {userId : req.params.userId};
             const user = queryUser.getUserById(data);
             if(user) {
@@ -124,8 +124,8 @@ class DataController {
     }
 
     async getFeeds(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const data = { userId : req.params.userId, lastTweetCount : req.params.lastTweetCount, lastLikeCount : req.params.lastLikeCount };
             const tweets = await queryTweet.getTweetsOfFriends(data);
             const likes = await queryLike.getLiksOfFriends(data);
@@ -143,8 +143,8 @@ class DataController {
     }   
      
     async getFeed(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
                 return res.status(422).json({errors : errors.array() });
@@ -157,8 +157,8 @@ class DataController {
 
     // checked
     async getUserPP(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const data = {userId : req.params.userId};
             const user = await queryUser.getUserById(data);
             if(user && user.user_pp) {
@@ -173,8 +173,8 @@ class DataController {
 
     // checked
     async getUserCP(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const data = {userId : req.params.userId};
             const user = await queryUser.getUserById(data);
             if(user && user.user_cp) {
@@ -188,8 +188,8 @@ class DataController {
     }
 
     async getTrends(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const data = {"offset" : req.params.offset};
             const trends = await queryHashTags.getTrends(data);
             return res.send(trends);
