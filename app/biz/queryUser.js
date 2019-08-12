@@ -136,12 +136,12 @@ const updateUserCP = ({userId,picturePath}) => {
     });
 }
 
-const updateUserProfile = ({userId,userStatus,userDob}) => {
+const updateUserProfile = ({userId,userStatus,userDob,userEmail}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`update user set user_status = '${userStatus}',user_dob = '${userDob}' where user_id = '${userId}'`,(error) => {
+                connection.query(`update user set user_status = '${userStatus}',user_dob = '${userDob}',user_email = '${userEmail}' where user_id = '${userId}'`,(error) => {
                     if(error) reject('error while executing query\n'+error);
                     resolve();
                 });
