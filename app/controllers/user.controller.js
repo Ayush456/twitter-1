@@ -170,7 +170,6 @@ class UserController {
                 });
             }
         });
-
     }
 }
 

@@ -7,6 +7,7 @@ const upload = require('../helpers/multer');
 
 router.post('/follow',userValidator.validate('follow'),user.follow);  // {userOne,userTwo};
 
+
 router.post('/unfollow',userValidator.validate('unfollow'),user.unfollow);  // {userOne,userTwo};
 
 router.post('/edit_profile',userValidator.validate('editProfile'),user.editProfile);  //{userId,userDob,userStatus};
