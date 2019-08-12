@@ -1,4 +1,4 @@
-const { validationResult } = require('express-validator');
+// const { validationResult } = require('express-validator');
 const fs = require('fs');
 const sha1 = require('sha1');
 
@@ -29,13 +29,13 @@ const removeHashTags = (data) => {
     data.hashTags.shift();
 } 
 
-const validateRequest = (req,res) => {
-        const errors = validationResult(req);
-        if(!errors.isEmpty()) {
-            res.status(422).json({errors : errors.array() });
-        }
-        return;
-}
+// const validateRequest = (req,res) => {
+//         const errors = validationResult(req);
+//         if(!errors.isEmpty()) {
+//             res.status(422).json({errors : errors.array() });
+//         }
+//         return;
+// }
 
 const addToResponse = (res) => {
     return new Promise((resolve,reject) => {
@@ -62,7 +62,6 @@ const generateUserId = (userName) =>{
 
 module.exports = {
     userToProfile : userToProfile,
-    validateRequest : validateRequest,
     deleteFile : deleteFile,
     hashTags : removeHashTags,
     addToResponse : addToResponse,

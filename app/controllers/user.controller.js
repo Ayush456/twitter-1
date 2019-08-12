@@ -1,6 +1,7 @@
 const queryFollow = require('../biz/queryFollow');
 const queryUser = require('../biz/queryUser');
 const utils = require('../biz/utils');
+const { validationResult } = require('express-validator');
 class UserController {
 
     async follow(req,res) {

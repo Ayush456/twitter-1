@@ -1,10 +1,11 @@
 const queryFollow = require('../biz/queryFollow');
 const queryUser = require('../biz/queryUser');
-const utils = require('../biz/utils');
 const queryTweet = require('../biz/queryTweet');
 const queryHashTags = require('../biz/queryHashtag');
 const queryComment = require('../biz/queryComment');
 const queryLike = require('../biz/queryLike');
+const { validationResult } = require('express-validator');
+const utils = require('../biz/utils');
 class DataController {
 
     //checked

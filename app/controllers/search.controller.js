@@ -1,6 +1,7 @@
 const queryUser = require('../biz/queryUser');
 const queryHashtag = require('../biz/queryHashtag');
 const utils = require('../biz/utils');
+const { validationResult } = require('express-validator');
 
 class Search {
 

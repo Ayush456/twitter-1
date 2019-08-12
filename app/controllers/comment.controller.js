@@ -1,5 +1,6 @@
 const queryComment = require('../biz/queryComment');
 const queryTweet = require('../biz/queryTweet');
+const { validationResult } = require('express-validator');
 const utils = require('../biz/utils');
 class CommentController {
     
