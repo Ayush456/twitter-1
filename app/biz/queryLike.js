@@ -83,7 +83,7 @@ const getLikseOfFriends = ({userId,lastLikeCount}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while connecting db\n'+error);
             else {
-                const query = `select u.user_name likedByName,utl.user_id_by likeById,v.user_name tweetByName,ut.user_id tweetById,ut.tweet_id tweetId,ut.tweet_msg tweetMsg,ut.tweet_like_count likeCount,ut.tweet_retweet_count retweetCount,ut.tweet_comment_count commentCount,utl.atTime from user_tweets_likes as utl join user_tweets ut on ut.tweet_id = utl.tweet_id join user u on u.user_id = utl.user_id_by join user_followers uf on uf.user_id_2 = utl.user_id_by join user v on v.user_id = ut.user_id where uf.user_id_1 = '${userId}' order by utl.atTime limit 0,20;`;
+                const query = `select u.user_name likedByName,utl.user_id_by likeById,v.user_name tweetByName,ut.user_id tweetById,ut.tweet_id tweetId,ut.tweet_msg tweetMsg,ut.tweet_like_count likeCount,ut.tweet_retweet_count retweetCount,ut.tweet_comment_count commentCount,utl.atTime from user_tweets_likes as utl join user_tweets ut on ut.tweet_id = utl.tweet_id join user u on u.user_id = utl.user_id_by join user_followers uf on uf.user_id_2 = utl.user_id_by join user v on v.user_id = ut.user_id where uf.user_id_1 = '${userId}' order by utl.atTime limit ${lastLikeCount},20;`;
                 connection.query(query,(error,result) => {
                     if(error)  reject('error while executing query\n'+error);
                     resolve(result);
