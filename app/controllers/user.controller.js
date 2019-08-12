@@ -1,12 +1,16 @@
 const queryFollow = require('../biz/queryFollow');
 const queryUser = require('../biz/queryUser');
 const utils = require('../biz/utils');
+const { validationResult } = require('express-validator');
 class UserController {
 
     async follow(req,res) {
-        utils.addToResponse(res);
         try {
-            utils.validateRequest(req);
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
 
             const data = req.body;
             const user1 = await queryUser.getUserById({userId:data.userOne});
@@ -24,9 +28,12 @@ class UserController {
     }
 
     async unfollow(req,res) {
-        utils.addToResponse(res);
         try {
-            utils.validateRequest(req);
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
 
             const data = req.body;
             const user1 = await queryUser.getUserById({userId:data.userOne});
@@ -43,9 +50,13 @@ class UserController {
     }
 
     async editProfile(req,res) {
-        utils.addToResponse(res);
         try {
-            utils.validateRequest(req);
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
+
             const data = req.body;
             const user = await queryUser.getUserById(data);
             if(user && user._isactive) {
@@ -59,9 +70,12 @@ class UserController {
     }
 
     async deleteAccount(req,res) {
-        utils.addToResponse(res);
         try {
-            utils.validateRequest(req);
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
 
             const data = req.body;
             const user = await queryUser.getUserById(data);
@@ -77,9 +91,13 @@ class UserController {
     }
 
     async changePassword(req,res) {
-        utils.addToResponse(res);
         try {
-            utils.validateRequest(req);
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
+
             const data = req.body;
             const user = await queryUser.getUserById(data);
             if(user) {
@@ -100,8 +118,8 @@ class UserController {
     }
 
     async editPP(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const data = {"userId" : req.body.userId,"picturePath" : req.files.upload[0].path};
             const user = await queryUser.getUserById(data);
             if(user) {
@@ -116,8 +134,8 @@ class UserController {
     }
 
     async editCP(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
             const data = {"userId" : req.body.userId,"picturePath" : req.files.upload[0].path};
             const user = await queryUser.getUserById(data);
             if(user) {

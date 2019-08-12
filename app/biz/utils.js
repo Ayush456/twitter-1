@@ -1,4 +1,4 @@
-const { validationResult } = require('express-validator');
+// const { validationResult } = require('express-validator');
 const fs = require('fs');
 const sha1 = require('sha1');
 
@@ -29,18 +29,21 @@ const removeHashTags = (data) => {
     data.hashTags.shift();
 } 
 
-const validateRequest = (req) => {
-    const errors = validationResult(req);
-    if(!errors.isEmpty()) {
-        return res.status(422).json({errors : errors.array() });
-    }
-    return;
-}
+// const validateRequest = (req,res) => {
+//         const errors = validationResult(req);
+//         if(!errors.isEmpty()) {
+//             res.status(422).json({errors : errors.array() });
+//         }
+//         return;
+// }
 
 const addToResponse = (res) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    return;
+    return new Promise((resolve,reject) => {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        resolve(res);
+    })
+
 }
 
 const deleteFile = (picturePath) => {
@@ -59,7 +62,6 @@ const generateUserId = (userName) =>{
 
 module.exports = {
     userToProfile : userToProfile,
-    validateRequest : validateRequest,
     deleteFile : deleteFile,
     hashTags : removeHashTags,
     addToResponse : addToResponse,

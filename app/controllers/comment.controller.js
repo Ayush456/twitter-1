@@ -1,10 +1,12 @@
 const queryComment = require('../biz/queryComment');
 const queryTweet = require('../biz/queryTweet');
+const { validationResult } = require('express-validator');
+const utils = require('../biz/utils');
 class CommentController {
     
     // checked
     async queryComment(req,res) {
-        dataOperation.addToResponse(res);
+        utils.addToResponse(res);
         try {
             const data = { tweetId : req.params.tweetId};
             const tweet = await queryTweet.getTweetById(data); 
@@ -20,13 +22,13 @@ class CommentController {
     
     //checked
     async saveComment(req,res) {
-        dataOperation.addToResponse(res);
         try {
             // if token is not expire or exist.
-
-            dataOperation.validateRequest(req);
-            
-
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
             const data = req.body;
             const tweet = await queryTweet.getTweetById(data);
             if(tweet) {
@@ -41,12 +43,14 @@ class CommentController {
     }
     
     //checked
-    async updateComment(req,res) {
-        dataOperation.addToResponse(res);    
+    async updateComment(req,res) {    
         try {
         // if token is not expire or exist.
-        dataOperation.validateRequest(req);
-
+        res = await utils.addToResponse(res); 
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            return res.status(422).json({errors : errors.array() });
+        }
         const data = req.body;
         const tweet = await queryTweet.getTweetById(data);
         if(tweet) {
@@ -61,11 +65,13 @@ class CommentController {
 
     //checked
     async deleteComment(req,res) {
-        dataOperation.addToResponse(res);
         try {
             // if token is not expire or exist.
-            dataOperation.validateRequest(req);
-
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
             const data = req.body;
             const tweet = await queryTweet.getTweetById(data);
             if(tweet) {

@@ -1,21 +1,19 @@
-var express = require('express');
-var router = express.Router();
-var mysqlDB = require('../helpers/connectiontodb');
-var AuthContoller = require('../controllers/auth.controller.js');
-let authController = new AuthContoller();
-
+const express = require('express');
+const router = express.Router();
+const AuthContoller = require('../controllers/auth.controller.js');
+const authController = new AuthContoller();
+const authValidator = require('../validators/auth.validator');
 
 
 
 router.get('/',authController.login);
 
-router.post('/login',authController.checkLoginReg);
+router.post('/login',authValidator.validate('checkLoginReq'),authController.checkLoginReq);
 
-router.get('/signup',(req,res) => {
-    res.render('signUp');
-});
+router.get('/signup',(req,res) => { res.render('signUp'); });
+
 // /user
-router.post('/signup', authController.signupReq);
+router.post('/signup',authValidator.validate('signupReq'),authController.signupReq);
 
 
 

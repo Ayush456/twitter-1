@@ -1,13 +1,17 @@
 const queryUser = require('../biz/queryUser');
 const utils = require('./../biz/utils');
-
+const { validationResult } = require('express-validator');
 class AuthController {
 
     login(req,res) { res.render('login',{data:null}); }
     
-    async checkLoginReg(req,res) {
-        utils.addToResponse(res); 
+    async checkLoginReq(req,res) {
         try {
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
             const data = req.body;
             const passwordHash = utils.generatePasswordHash(data.user_password);
             data.passwordHash = passwordHash;
@@ -15,13 +19,17 @@ class AuthController {
             if(user) return res.send(user);
             return res.send('Invalid login detalis')
         } catch(error) {
-            return res.status(500).sendfile(error);
+            return res.status(500).send(error);
         }
     }
 
     async signupReq(req,res) {
-        utils.addToResponse(res);
         try {
+            res = await utils.addToResponse(res); 
+            const errors = validationResult(req);
+            if(!errors.isEmpty()) {
+                return res.status(422).json({errors : errors.array() });
+            }
             const data = req.body;
             const isSigned = await queryUser.getUserByEmail(data);
             if(!isSigned) {
@@ -35,7 +43,7 @@ class AuthController {
             }
             return res.send('Email already exist');
         } catch(error) {
-            return res.status(500).sendfile(error);
+            return res.status(500).send(error);
         }
     }
 
