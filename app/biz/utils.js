@@ -4,8 +4,7 @@ const sha1 = require('sha1');
 
 const shortid = require('shortid');
 
-//checked and using
-const userToProfile = ({user_id,user_name,user_dob,user_pp,user_follow_count,user_follower_count,user_tweet_count,user_status,user_cp}) => {
+const userToProfile = ({user_id,user_name,user_dob,user_pp,user_follow_count,user_follower_count,user_tweet_count,user_status,user_cp,user_email}) => {
     let userProfile = {};
     userProfile.userId = user_id;
     userProfile.userName = user_name;
@@ -17,6 +16,7 @@ const userToProfile = ({user_id,user_name,user_dob,user_pp,user_follow_count,use
     userProfile.status = user_status;
     userProfile.ppPath = user_pp;
     userProfile.cpPath = user_cp;
+    userProfile.email = user_email;
     return(userProfile);
 }
 
@@ -28,14 +28,6 @@ const removeHashTags = (data) => {
     }
     data.hashTags.shift();
 } 
-
-// const validateRequest = (req,res) => {
-//         const errors = validationResult(req);
-//         if(!errors.isEmpty()) {
-//             res.status(422).json({errors : errors.array() });
-//         }
-//         return;
-// }
 
 const addToResponse = (res) => {
     return new Promise((resolve,reject) => {

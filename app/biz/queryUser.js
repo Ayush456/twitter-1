@@ -21,7 +21,7 @@ const getUserById = ({userId}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`select user_id,user_name,user_dob,user_email,_isactive,user_pp,user_cp,user_follow_count,user_follower_count,user_tweet_count,user_status from user where user_id = '${userId}'`,(error,row) => {
+                connection.query(`select user_id,user_name,user_dob,user_email,_isactive,user_pp,user_cp,user_follow_count,user_follower_count,user_tweet_count,user_status,user_email from user where user_id = '${userId}'`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
                     else if(row.length==0) return resolve(false);
                     return resolve(row[0]);
@@ -136,12 +136,12 @@ const updateUserCP = ({userId,picturePath}) => {
     });
 }
 
-const updateUserProfile = ({userId,userStatus,userDob}) => {
+const updateUserProfile = ({userId,userStatus,userDob,userEmail}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`update user set user_status = '${userStatus}',user_dob = '${userDob}' where user_id = '${userId}'`,(error) => {
+                connection.query(`update user set user_status = '${userStatus}',user_dob = '${userDob}',user_email = '${userEmail}' where user_id = '${userId}'`,(error) => {
                     if(error) reject('error while executing query\n'+error);
                     resolve();
                 });

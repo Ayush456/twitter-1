@@ -33,7 +33,10 @@ const validate = (method) => {
                 .exists().withMessage('userDob doesn\'t exist'),
                 body('userStatus')
                 .exists().withMessage('userStatus doesn\'t exist')
-                .isString().withMessage('userStatus must be string')
+                .isString().withMessage('userStatus must be string'),
+                body('userEmail')
+                .exists().withMessage('userEmail doesn\'t exist')
+                .isEmail().withMessage('userEmail should be an email-id')
             ]
         }
 

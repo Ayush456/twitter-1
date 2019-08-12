@@ -2,8 +2,6 @@ const queryUser = require('../biz/queryUser');
 const utils = require('./../biz/utils');
 const { validationResult } = require('express-validator');
 class AuthController {
-
-    login(req,res) { res.render('login',{data:null}); }
     
     async checkLoginReq(req,res) {
         try {
