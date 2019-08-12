@@ -48,7 +48,7 @@ class DataController {
             const data = {userId : req.params.userId};
             const user = await queryUser.getUserById(data);
             if(user) {
-                const userProfile = dataOperation.userToProfile(user);
+                const userProfile = utils.userToProfile(user);
                 return res.send(userProfile);
             }
             return res.status(418).send();
