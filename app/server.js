@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const hbs = require('hbs');
 const app = express();
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
 
 //default paths
@@ -40,16 +40,19 @@ app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
-//base routesc
+
+//base routes
 app.use('/',indexRoute);       //for login-signin-auth  
 app.use('/comment',commentRoute);     //search edit feed trend who_to_follow activity
 app.use('/tweet',tweetRoute);
 app.use('/data',dataRoute);
 app.use('/user',userRoute);
 app.use('/search',searchRoute);
+app.use('/socket',(req,res) => {res.send("sockets")});
 
 //port created
 const PORT = process.env.PORT || 5000;
 app.listen(PORT,()=> {
     console.log(`Server created at port : ${PORT}`);
 });
+
