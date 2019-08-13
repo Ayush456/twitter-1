@@ -11,9 +11,7 @@ app.use(queue({ activeLimit: 1, queuedLimit: -1 }));
 
 // const expressQueue = require('../');
 // const queueMw = expressQueue({ activeLimit: 2, queuedLimit: -1 });
-
 // app.use(queueMw);
- 
 // console.log(`queueLength: ${queueMw.queue.getLength()}`);
 
 //default paths
@@ -52,7 +50,7 @@ app.use(function(req, res, next) {
 });
 
 //base routes
-app.use('/',indexRoute);       //for login-signin-auth  
+app.use('/',indexRoute);              //for login-signin-auth  
 app.use('/comment',commentRoute);     //search edit feed trend who_to_follow activity
 app.use('/tweet',tweetRoute);
 app.use('/data',dataRoute);
