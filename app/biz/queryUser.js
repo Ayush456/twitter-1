@@ -67,7 +67,7 @@ const getUserByName = ({key,offset}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`select user_id userId,user_name userName,user_status userStatus,user_pp userPPPath from user where user_name = '${key}' order by userName limit ${offset},10`,(error,row) => {
+                connection.query(`select user_id userId,user_name userName,user_pp userPPPath from user where user_name = '${key}' order by userName limit ${offset},10`,(error,row) => {
                     if(error) reject('error while executing query\n'+error);
                     return resolve(row);
                 });

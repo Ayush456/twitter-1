@@ -1,9 +1,28 @@
 // modules required 
 const express = require('express');
+const queue = require('express-queue');
 const path = require('path');
 const hbs = require('hbs');
 const app = express();
 const bodyParser = require('body-parser');
+
+
+//  activelimit --> no of request to be process
+app.use(queue({ activeLimit: 1, queuedLimit: -1 }));
+
+// const expressQueue = require('../');
+// const queueMw = expressQueue({ activeLimit: 2, queuedLimit: -1 });
+
+// app.use(queueMw);
+ 
+// console.log(`queueLength: ${queueMw.queue.getLength()}`);
+
+
+
+
+
+
+
 
 
 //default paths
