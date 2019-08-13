@@ -31,13 +31,11 @@ class Search {
 
     getUsers(req,res){
         let user_name = req.body.user_name;
-        console.log(user_name);
 
         mysqldb.getConnection((err,connection)=>{
             if(err) throw err;
             else{
              connection.query(`select user_id,user_name from user where user_name like '%${user_name}%' `,[user_name],(err,result)=>{
-                console.log(result);
                 return res.status(200).send(result);
              });
             }
