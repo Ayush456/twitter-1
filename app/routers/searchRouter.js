@@ -6,4 +6,6 @@ const searchValidator = require('../validators/search.validator');
 
 router.post('',searchValidator.validate('getList'),search.getList);
 
+router.post('/users',search.getUsers);
+
 module.exports = router;

@@ -6,7 +6,6 @@ const hbs = require('hbs');
 const app = express();
 const bodyParser = require('body-parser');
 
-
 //  activelimit --> no of request to be process
 app.use(queue({ activeLimit: 1, queuedLimit: -1 }));
 
@@ -16,14 +15,6 @@ app.use(queue({ activeLimit: 1, queuedLimit: -1 }));
 // app.use(queueMw);
  
 // console.log(`queueLength: ${queueMw.queue.getLength()}`);
-
-
-
-
-
-
-
-
 
 //default paths
 const publicDirectoryPath = path.join(__dirname, 'public');

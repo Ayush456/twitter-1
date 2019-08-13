@@ -2,6 +2,7 @@ const queryUser = require('../biz/queryUser');
 const queryHashtag = require('../biz/queryHashtag');
 const utils = require('../biz/utils');
 const { validationResult } = require('express-validator');
+const mysqldb = require('./../helpers/connectiontodb');
 
 class Search {
 
@@ -26,6 +27,21 @@ class Search {
         } catch(error) {
             return res.status(500).sendfile(error);
         }
+    }
+
+    getUsers(req,res){
+        let user_name = req.body.user_name;
+        console.log(user_name);
+
+        mysqldb.getConnection((err,connection)=>{
+            if(err) throw err;
+            else{
+             connection.query(`select user_id,user_name from user where user_name like '%${user_name}%' `,[user_name],(err,result)=>{
+                console.log(result);
+                return res.status(200).send(result);
+             });
+            }
+        });
     }
 }
 

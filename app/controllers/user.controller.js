@@ -2,14 +2,18 @@ const queryFollow = require('../biz/queryFollow');
 const queryUser = require('../biz/queryUser');
 const utils = require('../biz/utils');
 const { validationResult } = require('express-validator');
+const mysqldb = require('./../helpers/connectiontodb');
 class UserController {
 
     async follow(req,res) {
+        // res.header('Access-Control-Allow-Origin', '*');
+        // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+        // res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
         try {
             res = await utils.addToResponse(res); 
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
+                return res.status(422).send(errors);
             }
 
             const data = req.body;
@@ -50,6 +54,11 @@ class UserController {
     }
 
     async editProfile(req,res) {
+
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
         try {
             res = await utils.addToResponse(res); 
             const errors = validationResult(req);
@@ -147,6 +156,23 @@ class UserController {
         } catch(error) {
             return res.status(500).send(error);
         }
+    }
+
+    editPro(req,res){
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Methods', '*');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
+        let user = req.body;
+        mysqldb.getConnection((error,connection)=>{
+            if(error) throw error;
+            else{
+                connection.query('update user set user_dob=?, user_email=?,user_status=?',[user.user_dob,user.user_email,user.user_status],(err,result)=>{
+                    if(err) return res.status(418);
+                    else res.status(200).send(result);
+                });
+            }
+        });
     }
 }
 
