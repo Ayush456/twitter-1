@@ -167,7 +167,7 @@ class UserController {
         mysqldb.getConnection((error,connection)=>{
             if(error) throw error;
             else{
-                connection.query('update user set user_dob=?, user_email=?,user_status=?',[user.user_dob,user.user_email,user.user_status],(err,result)=>{
+                connection.query('update user set user_dob=?, user_email=?,user_status=? where user_id=?' ,[user.user_dob,user.user_email,user.user_status,user.userId],(err,result)=>{
                     if(err) return res.status(418);
                     else res.status(200).send(result);
                 });
