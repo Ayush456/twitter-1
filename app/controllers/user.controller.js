@@ -6,11 +6,14 @@ const mysqldb = require('./../helpers/connectiontodb');
 class UserController {
 
     async follow(req,res) {
+        // res.header('Access-Control-Allow-Origin', '*');
+        // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+        // res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
         try {
             res = await utils.addToResponse(res); 
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
+                return res.status(422).send(errors);
             }
 
             const data = req.body;
