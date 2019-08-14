@@ -8,6 +8,7 @@ const getFollowers = ({userId}) => {
             else {
                 const query = `select user_name as userName,user_id as userId  from user u join user_followers uf on u.user_id = uf.user_id_1 where uf.user_id_2 = '${userId}' order by atTime desc limit 10`;
                 connection.query(query,(error,row) => {
+                    connection.release();
                     if(error) reject('error while executing query\n'+error);
                     if(row.length==0) return resolve(false);
                     resolve(row);
@@ -25,6 +26,7 @@ const getFollowings = ({userId}) => {
             else {
                 const query = `select user_name as userName,user_id as userId  from user u join user_followers uf on u.user_id = uf.user_id_2 where uf.user_id_1 = '${userId}' order by atTime desc limit 10`
                 connection.query(query,(error,row) => {
+                    connection.release();
                     if(error) return reject('error while executing query\n'+error);
                     if(row.length==0) return resolve(false);
                     return resolve(row);
@@ -38,9 +40,11 @@ const getFollowings = ({userId}) => {
 const isFollowed = ({userOne,userTwo}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
+            connection.release();
             if(error) reject('error while conecting db\n'+error);
             else {
                 connection.query(`select 1 from user_followers where user_id_2 = '${userOne}' and user_id_1 = '${userTwo}'`,(error,row) => {
+                    connection.release();
                     if(error) reject('error while executing query\n'+error);
                     else if(row.length==0) return resolve(false);
                     return resolve(true);
@@ -54,9 +58,11 @@ const isFollowed = ({userOne,userTwo}) => {
 const isFollowing = ({userOne,userTwo}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
+            connection.release();
             if(error) reject('error while conecting db\n'+error);
             else {
                 connection.query(`select 1 from user_followers where user_id_1 = '${userOne}' and user_id_2 = '${userTwo}'`,(error,row) => {
+                    connection.release();
                     if(error) reject('error while executing query\n'+error);
                     else if(row.length==0) return resolve(false);
                     resolve(true);
@@ -70,9 +76,11 @@ const isFollowing = ({userOne,userTwo}) => {
 const startFollowing  = ({userOne,userTwo}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
+            connection.release();
             if(error) reject('error while conecting db\n'+error);
             else {
                 connection.query(`insert into user_followers(user_id_1,user_id_2) values ('${userOne}','${userTwo}')`,(error,result) => {
+                    connection.release();
                     if(error) reject('error while executing query\n'+error);
                     resolve(result);
                 });
@@ -85,9 +93,11 @@ const startFollowing  = ({userOne,userTwo}) => {
 const stopFollowing  = ({userOne,userTwo}) => {
     return new Promise((resolve,reject) => {
         mysqldb.getConnection((error,connection) => {
+            connection.release();
             if(error) reject('error while conecting db\n'+error);
             else {
                 connection.query(`delete from user_followers where user_id_1 = '${userOne}' and user_id_2 = '${userTwo}'`,(error,row) => {
+                    connection.release();
                     if(error) reject('error while executing query\n'+error);
                     resolve();
                 });

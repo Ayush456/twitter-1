@@ -32,7 +32,8 @@ const removeHashTags = (data) => {
 const addToResponse = (res) => {
     return new Promise((resolve,reject) => {
         res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        res.header('Access-Control-Allow-Methods', '*');
+        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
         resolve(res);
     })
 

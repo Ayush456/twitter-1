@@ -7,6 +7,7 @@ const saveRetweet = ({fromTweetId,tweetId}) => {
             if(error) reject('error while connecting database\n'+error);
             else {
                 connection.query(`insert into user_tweets_retweets (from_tweet_id,tweet_id) values ('${fromTweetId}','${tweetId}')`,(error,result) => {
+                    connection.release();
                     if(error) reject('error while executing query\n'+error);
                     resolve(result);
                 });
@@ -21,6 +22,7 @@ const deleteRetweet = ({fromTweetId,tweetId}) => {
             if(error) reject('error while connecting database\n'+error);
             else {
                 connection.query(`delete from user_tweets_retweets where tweet_id = '${tweetId}' and from_tweet_id = '${fromTweetId}'`,(error) => {
+                    connection.release();
                     if(error) reject('error while executing query\n'+error);
                     resolve();
                 });
@@ -36,6 +38,7 @@ const getFromTweet = ({tweetId}) => {
             if(error) reject('error while connecting database\n'+error);
             else {
                 connection.query(`select from_tweet_id from user_tweets_retweets where tweet_id = '${tweetId}'`,(error,result) => {
+                    connection.release();
                     if(error) reject('error while executing query\n'+error);
                     if(result.length==0) return resolve(false);
                     resolve(result[0].from_tweet_id);
@@ -52,6 +55,7 @@ const deleteRetweetsByTweetId = ({tweetId}) => {
             if(error) reject('error while connecting database\n'+error);
             else {
                 connection.query(`delete from user_tweets_retweets where tweet_id = '${tweetId}'`,(error) => {
+                    connection.release();
                     if(error) reject('error while executing query\n'+error);
                     resolve();
                 });

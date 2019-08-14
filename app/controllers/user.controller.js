@@ -6,9 +6,6 @@ const mysqldb = require('./../helpers/connectiontodb');
 class UserController {
 
     async follow(req,res) {
-        // res.header('Access-Control-Allow-Origin', '*');
-        // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
-        // res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
         try {
             res = await utils.addToResponse(res); 
             const errors = validationResult(req);
@@ -54,11 +51,6 @@ class UserController {
     }
 
     async editProfile(req,res) {
-
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
-        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-
         try {
             res = await utils.addToResponse(res); 
             const errors = validationResult(req);
@@ -129,8 +121,12 @@ class UserController {
     async editPP(req,res) {
         try {
             res = await utils.addToResponse(res); 
+            // console.log(req.body);
+            // console.log(req.files);
+            // console.log(req);
             const data = {"userId" : req.body.userId,"picturePath" : req.files.upload[0].path};
             const user = await queryUser.getUserById(data);
+            // console.log(data);
             if(user) {
                 await queryUser.updateUserPP(data);
                 if(user.user_pp != null) utils.deleteFile(user.user_pp);
@@ -138,6 +134,7 @@ class UserController {
             }
             return res.status(418).send();   
         } catch(error) {
+            console.log(error);
             return res.status(500).send(error);
         }
     }
@@ -156,23 +153,6 @@ class UserController {
         } catch(error) {
             return res.status(500).send(error);
         }
-    }
-
-    editPro(req,res){
-        res.header('Access-Control-Allow-Origin', '*');
-        res.header('Access-Control-Allow-Methods', '*');
-        res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-
-        let user = req.body;
-        mysqldb.getConnection((error,connection)=>{
-            if(error) throw error;
-            else{
-                connection.query('update user set user_dob=?, user_email=?,user_status=?',[user.user_dob,user.user_email,user.user_status],(err,result)=>{
-                    if(err) return res.status(418);
-                    else res.status(200).send(result);
-                });
-            }
-        });
     }
 }
 
