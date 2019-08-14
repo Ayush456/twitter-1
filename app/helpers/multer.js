@@ -6,6 +6,7 @@ const upload_pp = multer({
         fileSize : 1000000, 
     },
     fileFilter(req,file,callback) {
+        // console.log(req.headers)
         if(!file.originalname.match(/\.(jpeg)$/)) {
             return callback(new Error('please upload a jpg image'));
         }

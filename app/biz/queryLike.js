@@ -7,6 +7,7 @@ const insertLike = ({userId,tweetId}) => {
             if(error) reject('error while connecting db\n'+error);
             else {
                 connection.query(`insert into user_tweets_likes(tweet_id,user_id_by) values ('${tweetId}','${userId}')`,(error,result) => {
+                    connection.release();
                     if(error)  reject('error while executing query\n'+error);
                     return resolve(result);
                 })
@@ -22,6 +23,7 @@ const isLiked = ({userId,tweetId}) => {
             if(error) reject('error while connecting db\n'+error);
             else {
                 connection.query(`select 1 from user_tweets_likes where user_id_by = '${userId}' and tweet_id = '${tweetId}'`,(error,result) => {
+                    connection.release();
                     if(error)  reject('error while executing query\n'+error);
                     else if(result.length==0) return resolve(false);
                     return resolve(true);
@@ -38,6 +40,7 @@ const deleteLike = ({userId,tweetId}) => {
             if(error) reject('error while connecting db\n'+error);
             else {
                 connection.query(`delete from user_tweets_likes where user_id_by = '${userId}' and tweet_id = '${tweetId}'`,(error) => {
+                    connection.release();
                     if(error)  reject('error while executing query\n'+error);
                     return resolve();
                 })
@@ -53,6 +56,7 @@ const deleteLikebyTweetId = ({tweetId}) => {
             if(error) reject('error while connecting db\n'+error);
             else {
                 connection.query(`delete from user_tweets_likes where tweet_id = '${tweetId}'`,(error) => {
+                    connection.release();
                     if(error)  reject('error while executing query\n'+error);
                     return resolve();
                 })
@@ -69,6 +73,7 @@ const getLikedBy = ({tweetId}) => {
             else {
                 //select user_name from user where user_id in (
                 connection.query(`select user_name from user where user_id in (select user_id_by from user_tweets_likes where tweet_id = '${tweetId}')`,(error,result) => {
+                    connection.release();
                     if(error)  reject('error while executing query\n'+error);
                     else if(result.length==0) return resolve(false);
                     return resolve(result);
@@ -85,6 +90,7 @@ const getLikseOfFriends = ({userId,lastLikeCount}) => {
             else {
                 const query = `select u.user_name likedByName,utl.user_id_by likeById,v.user_name tweetByName,ut.user_id tweetById,ut.tweet_id tweetId,ut.tweet_msg tweetMsg,ut.tweet_like_count likeCount,ut.tweet_retweet_count retweetCount,ut.tweet_comment_count commentCount,utl.atTime from user_tweets_likes as utl join user_tweets ut on ut.tweet_id = utl.tweet_id join user u on u.user_id = utl.user_id_by join user_followers uf on uf.user_id_2 = utl.user_id_by join user v on v.user_id = ut.user_id where uf.user_id_1 = '${userId}' order by utl.atTime limit ${lastLikeCount},20;`;
                 connection.query(query,(error,result) => {
+                    connection.release();
                     if(error)  reject('error while executing query\n'+error);
                     resolve(result);
                 })
