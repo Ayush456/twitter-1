@@ -11,7 +11,7 @@ class Search {
             res = await utils.addToResponse(res); 
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
+                return res.status(422).send({errors : errors.array() });
             }
             const data = req.body;
             if(data.key.charAt(0) == "#") {
