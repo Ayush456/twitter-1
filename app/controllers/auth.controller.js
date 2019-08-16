@@ -3,45 +3,50 @@ const utils = require('./../biz/utils');
 const { validationResult } = require('express-validator');
 class AuthController {
     
-    async checkLoginReq(req,res) {
+    async login(req,res) {
         try {
             res = await utils.addToResponse(res); 
             const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+            if(!errors.isEmpty()) { return res.status(422).json({errors : errors.array() }); }
+            
             const data = req.body;
-            const passwordHash = utils.generatePasswordHash(data.user_password);
-            data.passwordHash = passwordHash;
-            const user = await queryUser.login(data);
-            if(user) return res.send(user);
-            return res.send('Invalid login detalis')
+            const user = await queryUser.getUserByEmail(data)
+            if(user) {
+                const passwordHash = utils.generatePasswordHash(data.user_password);
+                if(passwordHash === user.user_password_hash) {
+                    const token = await utils.generateToken(user);
+                    return res.send(token);
+                }
+                return res.status(403).send("Invalid Password");
+            }
+            return res.status(403).send("Invalid Email");
         } catch(error) {
-            return res.status(500).send(error);
+            console.log(error);
+            return res.status(500).send();
         }
     }
 
-    async signupReq(req,res) {
+    async signup(req,res) {
         try {
             res = await utils.addToResponse(res); 
             const errors = validationResult(req);
             if(!errors.isEmpty()) {
                 return res.status(422).json({errors : errors.array() });
             }
+
             const data = req.body;
             const isSigned = await queryUser.getUserByEmail(data);
             if(!isSigned) {
-                const passwordHash = utils.generatePasswordHash(data.user_password);
-                const userId = utils.generateUserId(data.username);
-                data.userId = userId;
-                data.passwordHash = passwordHash;
+                data.passwordHash = utils.generatePasswordHash(data.user_password);
+                data.user_id = utils.generateUserId(data.username);
                 await queryUser.signup(data);
-                delete data.passwordHash,data.user_password;
-                return res.send({ insertStatus: '1', user:data, user_id: userId });
+                const token = await utils.generateToken(data);
+                return res.send(token);
             }
             return res.send('Email already exist');
         } catch(error) {
-            return res.status(500).send(error);
+            console.log(error);
+            return res.status(500).send();
         }
     }
 

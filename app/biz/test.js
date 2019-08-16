@@ -15,8 +15,7 @@ const newUser = {
 const test = async () => {
     try {
         // const result = await queryHashtag.getTweetByHashtag({hashTag:'food',lastTweetCount:0});
-        const result = await queryUser.getUserById(({userId:"3"}));
-        console.log(result);
+        const result = await queryFollow.getFollowers({userId:1});
         return;
     } catch (error) {
         console.log(error);

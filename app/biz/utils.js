@@ -1,7 +1,7 @@
 // const { validationResult } = require('express-validator');
 const fs = require('fs');
 const sha1 = require('sha1');
-
+const jwt = require('jsonwebtoken');
 const shortid = require('shortid');
 
 const userToProfile = ({user_id,user_name,user_dob,user_pp,user_follow_count,user_follower_count,user_tweet_count,user_status,user_cp,user_email}) => {
@@ -36,7 +36,26 @@ const addToResponse = (res) => {
         res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
         resolve(res);
     })
+}
 
+const verifyToken = (req,res,next) => {
+    const token = req.headers['auth_token'];
+    if(typeof token !== 'undefined') {
+        jwt.verify(token,'AdityaBaranwal',(err,authData) => {
+            if(err) return res.status(403).send("invalid token or expired token");
+            req.body.userId = authData.user_id;
+            next();
+        });
+    } else return res.status(403).send("token not found");
+}
+
+const generateToken = ({user_id}) => {
+    return new Promise ((resolve,reject) => {
+        jwt.sign({user_id:user_id},'AdityaBaranwal',{expiresIn:60*60},(error,token) => {
+            if(error) reject(error);
+            return resolve(token);
+        });
+    });
 }
 
 const deleteFile = (picturePath) => {
@@ -46,12 +65,7 @@ const deleteFile = (picturePath) => {
 
 const generatePasswordHash = (password) => {return sha1(password)};
 
-
-const generateUserId = (userName) =>{
-    return userName + shortid.generate();
-}
-
-
+const generateUserId = (userName) => { return userName + shortid.generate(); }
 
 module.exports = {
     userToProfile : userToProfile,
@@ -60,4 +74,6 @@ module.exports = {
     addToResponse : addToResponse,
     generatePasswordHash : generatePasswordHash,
     generateUserId : generateUserId,
+    generateToken : generateToken,
+    verifyToken : verifyToken
 }

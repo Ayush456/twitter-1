@@ -9,6 +9,7 @@ const getFollowers = ({userId}) => {
                 const query = `select user_name as userName,user_id as userId  from user u join user_followers uf on u.user_id = uf.user_id_1 where uf.user_id_2 = '${userId}' order by atTime desc limit 10`;
                 connection.query(query,(error,row) => {
                     connection.release();
+                    console.log(row);
                     if(error) reject('error while executing query\n'+error);
                     if(row.length==0) return resolve(false);
                     resolve(row);
