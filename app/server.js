@@ -1,11 +1,11 @@
 // modules required 
 const express = require('express');
-const queue = require('express-queue');
+// const queue = require('express-queue');
 const app = express();
 const bodyParser = require('body-parser');
 
 //  activelimit --> no of request to be process
-app.use(queue({ activeLimit: 1, queuedLimit: -1 }));
+// app.use(queue({ activeLimit: 1, queuedLimit: -1 }));
 
 // const expressQueue = require('../');
 // const queueMw = expressQueue({ activeLimit: 2, queuedLimit: -1 });
@@ -40,7 +40,7 @@ app.use('/user',userRoute);
 app.use('/search',searchRoute);
 
 //port created
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5002;
 app.listen(PORT,() => {
     console.log(`Server created at port : ${PORT}`);
 });
