@@ -2,30 +2,31 @@ const express = require('express');
 const router = express.Router();
 const DataController = require('../controllers/data.controller');
 const data = new DataController();
+const utils = require('../biz/utils');
 
-router.get('/isfollowing/:userOne/:userTwo',data.isFollowing);    //{userOne,userTwo}
+router.get('/isfollowing/:userOne/:userTwo',utils.verifyToken,data.isFollowing);    //{userOne,userTwo}
 
-router.get('/isfollowed/:userOne/:userTwo',data.isFollowed);       //{userOne,userIdTwo}
+router.get('/isfollowed/:userOne/:userTwo',utils.verifyToken,data.isFollowed);       //{userOne,userIdTwo}
 
-router.get('/profile/:userId',data.getProfile);          //{userID}
+router.get('/profile/:userId',utils.verifyToken,data.getProfile);          //{userID}
 
-router.get('/followers/:userId',data.getFollowers);    //{userId}
+router.get('/followers/:userId',utils.verifyToken,data.getFollowers);    //{userId}
 
-router.get('/followings/:userId',data.getFollowings); //{userId}
+router.get('/followings/:userId',utils.verifyToken,data.getFollowings); //{userId}
 
-router.get('/tweets/:userId',data.getTweets);             //{userId}
+router.get('/tweets/:userId',utils.verifyToken,data.getTweets);             //{userId}
 
-router.get('/likes/:userId',data.getLikes);                //{userId}   
+router.get('/likes/:userId',utils.verifyToken,data.getLikes);                //{userId}   
 
-router.get('/feeds/:userId/:lastTweetCount/:lastLikeCount',data.getFeeds);                //{userId}
+router.get('/feeds/:userId/:lastTweetCount/:lastLikeCount',utils.verifyToken,data.getFeeds);                //{userId}
 
-router.get('/feed/:tweetId',data.getFeed);                   //{tweetId}
+router.get('/feed/:tweetId',utils.verifyToken,data.getFeed);                   //{tweetId}
 
-router.get('/profile_picture/:userId',data.getUserPP);  //{userId}
+router.get('/profile_picture/:userId',utils.verifyToken,data.getUserPP);  //{userId}
 
-router.get('/cover_picture/:userId',data.getUserCP);  //{userId}
+router.get('/cover_picture/:userId',utils.verifyToken,data.getUserCP);  //{userId}
 
-router.get('/trends/:offset',data.getTrends);
+router.get('/trends/:offset',utils.verifyToken,data.getTrends);
 
 router.get('*', (req, res) => res.status(404).send());
 

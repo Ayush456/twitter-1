@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "amqplib": "^0.5.5",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
     "collections": "^5.1.9",

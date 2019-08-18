@@ -40,7 +40,7 @@ app.use('/user',userRoute);
 app.use('/search',searchRoute);
 
 //port created
-const PORT = process.env.PORT || 5002;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT,() => {
     console.log(`Server created at port : ${PORT}`);
 });
