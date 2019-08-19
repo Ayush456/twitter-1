@@ -61,7 +61,7 @@ const getTrends = ({offset}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while connecting to db\n'+error);
             else {
-                const query = `select hash_tag hashtag,count(*) count from user_tweets_hashtag group by hashtag order by count desc limit ${offset},20 `;
+                const query = `select hash_tag hashtag,count(*) count from user_tweets_hashtag group by hashtag order by count desc,hashtag limit ${offset},20 `;
                 connection.query(query,(error,result) => {
                     connection.release();
                     if(error) reject('error while executing query\n'+error);
