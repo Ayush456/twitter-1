@@ -2,7 +2,7 @@ const { body } = require('express-validator');
 
 const validate = (method) => {
     switch(method) {
-        case 'checkLoginReq': {
+        case 'login': {
             return [
                 body('user_email')
                 .exists().withMessage('request must have user_email field')
@@ -14,7 +14,7 @@ const validate = (method) => {
             ]
         }
 
-        case 'signupReq': {
+        case 'signup': {
             return [
                 body()
             ]

@@ -9,14 +9,13 @@ const { validationResult } = require('express-validator');
 
 class TweetController {
     
-    // checked
     async saveTweet(req,res) {
         try {
-            res = await utils.addToResponse(res); 
+            res = await utils.addToResponse(res);
+        
             const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+            if(!errors.isEmpty()) return res.status(422).json({errors : errors.array() });
+                
             const data = req.body;
             const user = await queryUser.getUserById(data);
             if(user) {
@@ -26,24 +25,21 @@ class TweetController {
                 await queryUser.increaseCount('user_tweet_count',{userId:data.userId})
                 return res.send();
             }
-            return res.status(418).send();
+            return res.status(404).send("user not found");
         } catch(error) {
-            return res.status(500).sendfile(error);
+            console.log(error);
+            return res.status(500).sendfile("internal server error");
         }
     }
 
-    // checked
     async editTweet(req,res) {
         try {
-            // validate token and check for user
             res = await utils.addToResponse(res); 
+
             const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+            if(!errors.isEmpty()) return res.status(422).json({errors : errors.array() });
 
             const data = req.body;
-
             const tweet = await queryTweet.getTweetById(data);
             if(tweet) {
                 utils.hashTags(data);
@@ -53,21 +49,19 @@ class TweetController {
                 await queryHashtag.insertHashTags(data);
                 return res.send();
             }
-            return res.status(418).send();
+            return res.status(404).send("tweet does not exist");
         } catch(error) {
-            return res.status(500).send(error);
+            console.log(error);
+            return res.status(500).send("internal server error");
         }
     }
 
-
     async deleteTweet(req,res) {
         try {
-            // validate token and check for user
             res = await utils.addToResponse(res); 
+
             const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+            if(!errors.isEmpty()) return res.status(422).json({errors : errors.array() });
 
             const data = req.body;
             const result = await queryTweet.getTweet(data);
@@ -82,22 +76,21 @@ class TweetController {
                 }
                 await queryTweet.deleteTweet(data);
                 await queryUser.decreaseCount('user_tweet_count',data);
-                return res.send();
+                return res.send("tweet deleted");
             }
-            return res.status(418).send();
+            return res.status(404).send("tweet does not exist");
         } catch(error) {
-            return res.status(500).sendfile(error);
+            console.log(error);
+            return res.status(500).sendfile("internal server error");
         }
     }
 
-    // checked
     async like(req,res) {
         try {
             res = await utils.addToResponse(res); 
+            
             const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).json({errors : errors.array() });
-            }
+            if(!errors.isEmpty()) return res.status(422).json({errors : errors.array() });
 
             let  data = req.body;
             const tweet = await queryTweet.getTweetById(data);
@@ -116,16 +109,15 @@ class TweetController {
                 }
                 return res.send(true); 
             }
-            return res.status(404).send();
+            return res.status(404).send("tweet does not exist found");
             
         } catch(error) {
-            return res.status(500).send(error);
+            console.log(error);
+            return res.status(500).send("internal server error");
         }
     }
 
-    // checked
     async retweet(req,res){
-        // validate token and check for user
         try {
             res = await utils.addToResponse(res); 
             const errors = validationResult(req);
@@ -146,11 +138,12 @@ class TweetController {
                 await queryRetweet.makeRetweetLog({fromTweetId:from,tweetId:data.tweetId});
                 await queryTweet.increaseCount('tweet_retweet_count',{tweetId:from});
                 await queryUser.increaseCount('user_tweet_count',data);
-                return res.send();
+                return res.send("retweeted");
            }
-           return res.status(418).send();
+           return res.status(404).send("user or tweet does not exists");
         } catch(error) {
-           return res.status(500).send(error);
+            console.log(error);
+           return res.status(500).send("internal server error");
        }
     }
 }

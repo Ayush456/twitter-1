@@ -38,7 +38,7 @@ const getUserByEmail = ({user_email}) => {
         mysqldb.getConnection((error,connection) => {
             if(error) reject('error while conecting db\n'+error);
             else {
-                connection.query(`select 1 from user where user_email = '${user_email}'`,(error,row) => {
+                connection.query(`select user_id,user_password_hash from user where user_email = '${user_email}'`,(error,row) => {
                     connection.release();
                     if(error) reject('error while executing query\n'+error);
                     else if(row.length==0) return resolve(false);

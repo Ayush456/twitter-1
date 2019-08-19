@@ -10,9 +10,7 @@ class Search {
         try {
             res = await utils.addToResponse(res); 
             const errors = validationResult(req);
-            if(!errors.isEmpty()) {
-                return res.status(422).send({errors : errors.array() });
-            }
+            if(!errors.isEmpty()) return res.status(422).json({errors : errors.array() });
             const data = req.body;
             if(data.key.charAt(0) == "#") {
                 data.key = data.key.slice(1,data.key.length);
@@ -25,7 +23,8 @@ class Search {
                 return res.send(result);
             }
         } catch(error) {
-            return res.status(500).sendfile(error);
+            console.log(error);
+            return res.status(500).sendfile("interval server error");
         }
     }
 
