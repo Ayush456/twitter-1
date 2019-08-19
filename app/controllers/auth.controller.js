@@ -41,7 +41,7 @@ class AuthController {
                 data.user_id = utils.generateUserId(data.username);
                 await queryUser.signup(data);
                 const token = await utils.generateToken(data);
-                return res.send(token);
+                return res.send({auth_token : token});
             }
             return res.send('Email already exist');
         } catch(error) {
