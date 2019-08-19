@@ -18,7 +18,7 @@ router.get('/tweets/:userId',utils.verifyToken,data.getTweets);             //{u
 
 router.get('/likes/:userId',utils.verifyToken,data.getLikes);                //{userId}   
 
-router.get('/feeds/:userId/:lastTweetCount/:lastLikeCount',utils.verifyToken,data.getFeeds);                //{userId}
+router.get('/feeds/:lastTweetCount/:lastLikeCount',utils.verifyToken,data.getFeeds);                //{userId}
 
 router.get('/feed/:tweetId',utils.verifyToken,data.getFeed);                   //{tweetId}
 
