@@ -1,17 +1,19 @@
-const amqp = require('amqplib/callback_api');
-amqp.connect('amqp://localhost', (error0, connection) => {
-    if(error0) throw error0;
-    connection.createChannel((error1,channel) => {
-        if(error1) throw error1;
-        const queue = "hello";
-        const msg = "hello world";
-        channel.assertQueue(queue, { durable: false });
-        channel.sendToQueue(queue, Buffer.from(msg));
-        console.log(" [x] Sent %s", msg);
-    });
+const rmq = require('redis-message-queue');
+const normalQueue = new rmq.NormalQueue('requestQueue','6379','127.0.0.1');
 
-    setTimeout(function() {
-        connection.close();
-        process.exit(0);
-    }, 500);
+normalQueue.push("request 1",(error) => {
+    console.log(error);
 });
+
+normalQueue.push("request 2",(error) => {
+    console.log(error);
+});
+
+
+normalQueue.get(10,(error,message) => {
+    if(error) console.log(error);
+    else {
+        console.log(message);
+    }
+});
+
