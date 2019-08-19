@@ -15,7 +15,7 @@ class AuthController {
                 const passwordHash = utils.generatePasswordHash(data.user_password);
                 if(passwordHash === user.user_password_hash) {
                     const token = await utils.generateToken(user);
-                    return res.send(token);
+                    return res.send({auth_token : token});
                 }
                 return res.status(403).send("Invalid Password");
             }

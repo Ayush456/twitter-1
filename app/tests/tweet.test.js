@@ -7,7 +7,7 @@ const tweet = new Tweet();
 describe('#tweet.saveTweet()', function() {
 
     context('',function() {
-        it('',function(done) {
+        it('',function() {
             let result = tweet.saveTweet({});
             expect(result.status).to.deep.eql(422);
         });
