@@ -127,7 +127,7 @@ class DataController {
     async getFeeds(req,res) {
         try {
             res = await utils.addToResponse(res); 
-            const data = { userId : req.params.userId, lastTweetCount : req.params.lastTweetCount, lastLikeCount : req.params.lastLikeCount };
+            const data = { userId : req.body.userId, lastTweetCount : req.params.lastTweetCount, lastLikeCount : req.params.lastLikeCount };
             const tweets = await queryTweet.getTweetsOfFriends(data);
             const likes = await queryLike.getLiksOfFriends(data);
             // const comments = await queryComment.getCommnetsOfFriends(data);  
