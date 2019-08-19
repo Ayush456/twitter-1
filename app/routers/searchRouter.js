@@ -7,6 +7,6 @@ const utils = require('../biz/utils');
 
 router.post('',utils.verifyToken,searchValidator.validate('getList'),search.getList);
 
-// router.post('/users',utils.verifyToken,search.getUsers);
+router.post('/users',utils.verifyToken,search.getUsers);
 
 module.exports = router;
